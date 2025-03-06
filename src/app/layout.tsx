@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import "./style.css";
+import Provider from "@/components/provider/Provider";
+import Navbar from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import Slider from "@/components/layout/Slider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,11 +31,83 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <head>
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="keywords" content="Site keywords here" />
+        <meta name="description" content="" />
+        <meta name="copyright" content="" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <title>
+          Mediplus - Free Medical and Doctor Directory HTML Template.
+        </title>
+
+        <link rel="icon" href="img/favicon.png" />
+
+        <link
+          href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
+          rel="stylesheet"
+        />
+
+        <link rel="stylesheet" href="/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/css/nice-select.css" />
+        <link rel="stylesheet" href="/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/css/icofont.css" />
+        <link rel="stylesheet" href="/css/slicknav.min.css" />
+        <link rel="stylesheet" href="/css/owl-carousel.css" />
+        <link rel="stylesheet" href="/css/datepicker.css" />
+        <link rel="stylesheet" href="/css/animate.min.css" />
+        <link rel="stylesheet" href="/css/magnific-popup.css" />
+        <link rel="stylesheet" href="/css/normalize.css" />
+        <link rel="stylesheet" href="./style.css" />
+        <link rel="stylesheet" href="/css/responsive.css" />
+      </head>
+      {/* <body>
+        <Provider>
+          <div classNameName="min-h-screen flex flex-col">
+            <Navbar />
+            <div classNameName="flex-1">{children}</div>
+            <Footer />
+          </div>
+        </Provider>
+      </body> */}
+      <body>
+        <Provider>
+          <Header />
+          {children}
+          <Footer />
+        </Provider>
       </body>
     </html>
   );
+}
+
+{
+  /* <script src="js/jquery.min.js"></script>
+ 
+<script src="js/jquery-migrate-3.0.0.js"></script>
+
+<script src="js/jquery-ui.min.js"></script>
+
+    <script src="js/easing.js"></script>
+
+<script src="js/colors.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.nav.js"></script>
+<script src="js/slicknav.min.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+<script src="js/niceselect.js"></script>
+<script src="js/tilt.jquery.min.js"></script>
+    <script src="js/owl-carousel.js"></script>
+<script src="js/jquery.counterup.min.js"></script>
+<script src="js/steller.js"></script>
+<script src="js/wow.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script> */
 }

@@ -1,0 +1,173 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  STAFF
+  ADMIN
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELED
+}
+
+model Account {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  email     String   @unique
+  role      Role
+  createdAt DateTime @default(now())
+
+  patient Patient?
+  doctor  Doctor?
+  staff   Staff?
+  admin   Admin?
+}
+
+model Patient {
+  id             String    @id @default(uuid()) @map("userId")
+  fullName       String?
+  dob            DateTime?
+  gender         String?
+  phone          String?
+  address        String?
+  medicalHistory String?
+
+  account          Account          @relation(fields: [id], references: [id])
+  appointments     Appointment[]
+  prescriptions    Prescription[]
+  bills            Bill[]
+  medicalHistories MedicalHistory[]
+  medicalRecords   MedicalRecord[]
+}
+
+model Doctor {
+  id             String  @id @default(uuid())
+  userId         String  @unique
+  fullName       String?
+  specialization String?
+  phone          String?
+  department     String?
+
+  user             Account          @relation(fields: [userId], references: [id])
+  appointments     Appointment[]
+  prescriptions    Prescription[]
+  bills            Bill[]
+  medicalHistories MedicalHistory[]
+  medicalRecords   MedicalRecord[]
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  patientId       String
+  doctorId        String
+  appointmentDate DateTime
+  status          AppointmentStatus @default(SCHEDULED)
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+}
+
+model Prescription {
+  id        String   @id @default(uuid())
+  patientId String
+  doctorId  String
+  diagnosis String
+  note      String?
+  createdAt DateTime @default(now())
+  status    String   @default("ACTIVE") // ACTIVE, COMPLETED, CANCELLED
+
+  patient   Patient    @relation(fields: [patientId], references: [id])
+  doctor    Doctor     @relation(fields: [doctorId], references: [id])
+  medicines Medicine[]
+  Bill      Bill[]
+}
+
+model Medicine {
+  id             String  @id @default(uuid())
+  prescriptionId String
+  name           String
+  dosage         String
+  frequency      String
+  duration       String
+  note           String?
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model Bill {
+  id             String    @id @default(uuid())
+  patientId      String
+  doctorId       String
+  prescriptionId String?
+  totalAmount    Decimal
+  status         String    @default("PENDING") // PENDING, PAID, CANCELLED
+  createdAt      DateTime  @default(now())
+  paidAt         DateTime?
+
+  patient      Patient       @relation(fields: [patientId], references: [id])
+  doctor       Doctor        @relation(fields: [doctorId], references: [id])
+  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
+}
+
+model MedicalHistory {
+  id        String   @id @default(uuid())
+  patientId String
+  doctorId  String
+  visitDate DateTime
+  symptoms  String
+  diagnosis String
+  treatment String
+  note      String?
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+}
+
+model MedicalRecord {
+  id          String   @id @default(uuid())
+  patientId   String
+  doctorId    String
+  recordDate  DateTime @default(now())
+  diagnosis   String
+  treatment   String
+  note        String?
+  attachments String[] // URLs to attached files
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+}
+
+model Staff {
+  id         String  @id @default(uuid()) @map("userId")
+  fullName   String?
+  position   String?
+  phone      String?
+  department String?
+
+  account Account @relation(fields: [id], references: [id])
+}
+
+model Admin {
+  id       String  @id @default(uuid()) @map("userId")
+  fullName String?
+  phone    String?
+
+  account Account @relation(fields: [id], references: [id])
+}
