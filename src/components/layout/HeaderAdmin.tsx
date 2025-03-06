@@ -60,14 +60,6 @@ const Header = () => {
                     Đăng xuất
                   </li>
                 )}
-                {!role && !user && !profile && (
-                  <Link
-                    className="p-2 bg-[#1A76D1] text-white rounded-md cursor-pointer"
-                    href={"/login"}
-                  >
-                    Đăng nhập
-                  </Link>
-                )}
               </ul>
               {/* End Top Contact */}
             </div>
@@ -94,7 +86,7 @@ const Header = () => {
               </div>
               <div className="col-lg-7 col-md-9 col-12">
                 {/* Main Menu */}
-                <div className="main-menu">
+                {/* <div className="main-menu">
                   <nav className="navigation">
                     <ul className="nav menu">
                       <li className="active">
@@ -138,16 +130,10 @@ const Header = () => {
                       </li>
                     </ul>
                   </nav>
-                </div>
+                </div> */}
                 {/* End Main Menu */}
               </div>
-              <div className="col-lg-2 col-12">
-                <div className="get-quote">
-                  <Link href="/user" className="btn">
-                    Book Appointment
-                  </Link>
-                </div>
-              </div>
+              <div className="col-lg-2 col-12"></div>
             </div>
           </div>
         </div>

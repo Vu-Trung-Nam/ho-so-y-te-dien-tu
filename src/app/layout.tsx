@@ -75,11 +75,7 @@ export default function RootLayout({
         </Provider>
       </body> */}
       <body>
-        <Provider>
-          <Header />
-          {children}
-          <Footer />
-        </Provider>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

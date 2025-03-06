@@ -35,7 +35,7 @@ export default function Navbar() {
           <Link href="/" className="hover:underline">
             Dịch vụ
           </Link>
-            {/* <Link href="/" className="hover:underline">
+          {/* <Link href="/" className="hover:underline">
               Đăng ký khám
             </Link> */}
           <Link href="/" className="hover:underline">
@@ -54,7 +54,7 @@ export default function Navbar() {
           <button
             onClick={() => {
               clearCookie();
-              router.push("/login");
+              window.location.reload();
             }}
             className="bg-white text-blue-600 p-1 px-2 rounded-lg"
           >
