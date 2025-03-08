@@ -26,7 +26,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { username, password, email, role } = body;
+    const {
+      username,
+      password,
+      email,
+      fullName,
+      phone,
+      address,
+      gender,
+      dob,
+      role,
+    } = body;
+
+    console.log("body:", body);
 
     // Create account with related data based on role
     // bệnh nhân đăng kí
@@ -35,14 +47,14 @@ export async function POST(request: Request) {
         username,
         password,
         email,
-        role: "PATIENT",
+        role,
         patient: {
           create: {
-            fullName: null,
-            dob: null,
-            gender: null,
-            phone: null,
-            address: null,
+            fullName,
+            dob,
+            gender,
+            phone,
+            address,
           },
         },
       },
@@ -62,62 +74,62 @@ export async function POST(request: Request) {
 }
 
 // PUT /api/accounts/[id] - Update account
-export async function PUT(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-    if (!id) {
-      return NextResponse.json(
-        { error: "Account ID is required" },
-        { status: 400 }
-      );
-    }
+// export async function PUT(request: Request) {
+//   try {
+//     const { searchParams } = new URL(request.url);
+//     const id = searchParams.get("id");
+//     if (!id) {
+//       return NextResponse.json(
+//         { error: "Account ID is required" },
+//         { status: 400 }
+//       );
+//     }
 
-    const body = await request.json();
-    const { password, ...updateData } = body;
+//     const body = await request.json();
+//     const { password, ...updateData } = body;
 
-    const data = password ? { ...updateData, password } : updateData;
+//     const data = password ? { ...updateData, password } : updateData;
 
-    const account = await prisma.account.update({
-      where: { id },
-      data,
-      include: {
-        patient: true,
-        doctor: true,
-        staff: true,
-      },
-    });
+//     const account = await prisma.account.update({
+//       where: { id },
+//       data,
+//       include: {
+//         patient: true,
+//         doctor: true,
+//         staff: true,
+//       },
+//     });
 
-    return NextResponse.json(account);
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to update account" },
-      { status: 500 }
-    );
-  }
-}
+//     return NextResponse.json(account);
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: "Failed to update account" },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // DELETE /api/accounts/[id] - Delete account
-export async function DELETE(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-    if (!id) {
-      return NextResponse.json(
-        { error: "Account ID is required" },
-        { status: 400 }
-      );
-    }
+// export async function DELETE(request: Request) {
+//   try {
+//     const { searchParams } = new URL(request.url);
+//     const id = searchParams.get("id");
+//     if (!id) {
+//       return NextResponse.json(
+//         { error: "Account ID is required" },
+//         { status: 400 }
+//       );
+//     }
 
-    await prisma.account.delete({
-      where: { id },
-    });
+//     await prisma.account.delete({
+//       where: { id },
+//     });
 
-    return NextResponse.json({ message: "Account deleted successfully" });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to delete account" },
-      { status: 500 }
-    );
-  }
-}
+//     return NextResponse.json({ message: "Account deleted successfully" });
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: "Failed to delete account" },
+//       { status: 500 }
+//     );
+//   }
+// }

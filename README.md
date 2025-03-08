@@ -9,3 +9,10 @@
 
 
  <!-- 2.npx prisma migrate dev --name init, -->
+
+ * Hệ thống: 
+ -Bệnh Nhân:
+ 1. Bệnh nhân đăng kí lịch khám, chọn bác sĩ.
+ 2. Nhân viên xác nhận lịch khám
+- Bác sĩ: 
+1. Hiện danh sách lịch khám được chỉ định đã dc nhân viên xác nhận

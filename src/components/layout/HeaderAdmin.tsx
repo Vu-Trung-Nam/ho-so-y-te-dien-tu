@@ -1,14 +1,15 @@
 "use client";
-import { getRole, getUsername, getProfile, clearCookie } from "@/lib/cookie";
+import useAuthStore from "@/store/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import React from "react";
 
 const Header = () => {
-  const role = getRole();
-  const user = getUsername();
-  const profile = getProfile();
+  const { role, profile, userName, clearCookieStore } = useAuthStore();
+  console.log("🚀 ~ Header ~ role:", role);
+  console.log("🚀 ~ Header ~ userName:", userName);
+  console.log("🚀 ~ Header ~ profile:", profile);
   const router = useRouter();
   const home = {
     ADMIN: "/admin",
@@ -49,12 +50,12 @@ const Header = () => {
                   <i className="fa fa-envelope"></i>
                   <a href="mailto:support@yourmail.com">support@yourmail.com</a>
                 </li>
-                {role && user && profile && (
+                {role && userName && profile && (
                   <li
                     className="p-2 bg-[#1A76D1] text-white rounded-md cursor-pointer"
                     onClick={() => {
-                      clearCookie();
-                      window.location.reload();
+                      clearCookieStore();
+                      router.push("/");
                     }}
                   >
                     Đăng xuất

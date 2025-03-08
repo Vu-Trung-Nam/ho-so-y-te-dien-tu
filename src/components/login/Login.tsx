@@ -6,8 +6,10 @@ import { useLogin } from "@/tanstackquery/account";
 import { toast } from "react-toastify";
 import { set } from "node_modules/@types/js-cookie";
 import { setProfile, setRole, setUsername } from "@/lib/cookie";
+import useAuthStore from "@/store/store";
 
 const Login = () => {
+  const { setCookieStore } = useAuthStore();
   const router = useRouter();
   const login = useLogin();
   const [formData, setFormData] = useState({
@@ -36,6 +38,11 @@ const Login = () => {
       setRole(response?.role);
       setUsername(response?.username);
       setProfile(response?.profile);
+      setCookieStore({
+        role: response?.role,
+        userName: response?.username,
+        profile: response?.profile,
+      });
       if (response?.role === "PATIENT") {
         router.push("/user");
       } else if (response?.role === "DOCTOR") {
@@ -74,7 +81,7 @@ const Login = () => {
                 htmlFor="email"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Your email
+                Your username
               </label>
               <input
                 // type="email"

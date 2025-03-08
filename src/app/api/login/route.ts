@@ -18,7 +18,6 @@ export async function POST(request: Request) {
         patient: true,
         doctor: true,
         staff: true,
-        admin: true,
       },
     });
 
@@ -35,8 +34,7 @@ export async function POST(request: Request) {
       username: account.username,
       email: account.email,
       role: account.role,
-      profile:
-        account.patient || account.doctor || account.staff || account.admin,
+      profile: account.patient || account.doctor || account.staff,
     });
   } catch (error) {
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
