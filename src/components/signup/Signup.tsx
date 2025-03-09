@@ -1,51 +1,62 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { useRegister } from "@/tanstackquery/account";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const userSchema = z.object({
+  username: z.string(),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+    .regex(/[A-Z]/, "Mật khẩu phải chứa ít nhất 1 chữ hoa")
+    .regex(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      "Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt"
+    ),
+  confirmPassword: z.string(),
+  fullName: z.string(),
+  phone: z.string(),
+  address: z.string(),
+  gender: z.string(),
+  dob: z.string(),
+});
+
+type FormData = z.infer<typeof userSchema>;
+
 const Signup = () => {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    fullName: "",
-    phone: "",
-    address: "",
-    gender: "",
-    dob: "",
-  });
-
   const registerMutation = useRegister();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(userSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match!");
+  const onSubmit = async (data: FormData) => {
+    if (data.password !== data.confirmPassword) {
+      toast.error("Mật khẩu không khớp!");
       return;
     }
 
     const registerData = {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
+      username: data.username,
+      email: data.email,
+      password: data.password,
       role: "PATIENT" as const,
-      fullName: formData.fullName,
-      phone: formData.phone,
-      address: formData.address,
-      gender: formData.gender,
-      dob: new Date(formData.dob).toISOString(),
+      fullName: data.fullName,
+      phone: data.phone,
+      address: data.address,
+      gender: data.gender,
+      dob: new Date(data.dob).toISOString(),
     };
 
     try {
@@ -74,59 +85,71 @@ const Signup = () => {
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Create an account
           </h1>
-          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+          <form
+            className="space-y-4 md:space-y-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div>
               <label
                 htmlFor="username"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Username
+                Username <span className="text-red-500">*</span>
               </label>
               <input
-                name="username"
+                {...register("username")}
                 id="username"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
-                required={true}
-                value={formData.username}
-                onChange={handleChange}
+                required
               />
+              {errors.username && (
+                <p className="text-red-500 text-sm">
+                  {errors.username.message}
+                </p>
+              )}
             </div>
             <div>
               <label
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Password
+                Password <span className="text-red-500">*</span>
               </label>
               <input
+                {...register("password")}
                 type="password"
-                name="password"
                 id="password"
                 placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required={true}
-                value={formData.password}
-                onChange={handleChange}
+                required
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
             <div>
               <label
                 htmlFor="confirmPassword"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Confirm password
+                Confirm password <span className="text-red-500">*</span>
               </label>
               <input
+                {...register("confirmPassword")}
                 type="password"
-                name="confirmPassword"
                 id="confirmPassword"
                 placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required={true}
-                value={formData.confirmPassword}
-                onChange={handleChange}
+                required
               />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -134,33 +157,38 @@ const Signup = () => {
                 htmlFor="email"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                email
+                Email <span className="text-red-500">*</span>
               </label>
               <input
+                {...register("email")}
                 type="email"
-                name="email"
                 id="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required={true}
-                value={formData.email}
-                onChange={handleChange}
+                required
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
             </div>
             <div>
               <label
                 htmlFor="fullName"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Full Name
+                Full Name <span className="text-red-500">*</span>
               </label>
               <input
+                {...register("fullName")}
                 type="text"
-                name="fullName"
                 id="fullName"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={formData.fullName}
-                onChange={handleChange}
+                required
               />
+              {errors.fullName && (
+                <p className="text-red-500 text-sm">
+                  {errors.fullName.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -168,16 +196,18 @@ const Signup = () => {
                 htmlFor="phone"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Phone Number
+                Phone Number <span className="text-red-500">*</span>
               </label>
               <input
+                {...register("phone")}
                 type="tel"
-                name="phone"
                 id="phone"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={formData.phone}
-                onChange={handleChange}
+                required
               />
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone.message}</p>
+              )}
             </div>
 
             <div>
@@ -185,16 +215,18 @@ const Signup = () => {
                 htmlFor="address"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Address
+                Address <span className="text-red-500">*</span>
               </label>
               <input
+                {...register("address")}
                 type="text"
-                name="address"
                 id="address"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={formData.address}
-                onChange={handleChange}
+                required
               />
+              {errors.address && (
+                <p className="text-red-500 text-sm">{errors.address.message}</p>
+              )}
             </div>
 
             <div>
@@ -202,22 +234,22 @@ const Signup = () => {
                 htmlFor="gender"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Gender
+                Gender <span className="text-red-500">*</span>
               </label>
               <select
-                name="gender"
+                {...register("gender")}
                 id="gender"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={formData.gender}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  handleChange(e as any)
-                }
+                required
               >
                 <option value="">Select gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
+              {errors.gender && (
+                <p className="text-red-500 text-sm">{errors.gender.message}</p>
+              )}
             </div>
 
             <div>
@@ -225,16 +257,18 @@ const Signup = () => {
                 htmlFor="dob"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Date of Birth
+                Date of Birth <span className="text-red-500">*</span>
               </label>
               <input
+                {...register("dob")}
                 type="date"
-                name="dob"
                 id="dob"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={formData.dob}
-                onChange={handleChange}
+                required
               />
+              {errors.dob && (
+                <p className="text-red-500 text-sm">{errors.dob.message}</p>
+              )}
             </div>
             <button
               type="submit"

@@ -2,17 +2,123 @@
 import useAuthStore from "@/store/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const Header = () => {
   const { role, profile, userName, clearCookieStore } = useAuthStore();
+
   const router = useRouter();
-  const home = {
-    ADMIN: "/admin",
-    DOCTOR: "/doctor",
-    STAFF: "/staff",
-    PATIENT: "/user",
+  const pathname = usePathname();
+  const notLoginMenu = () => {
+    return (
+      <>
+        <div className="col-lg-7 col-md-9 col-12">
+          {/* Main Menu */}
+          <div className="main-menu">
+            <nav className="navigation">
+              <ul className="nav menu">
+                <li className={pathname === "/" ? "active" : ""}>
+                  <Link href="/">Home</Link>
+                </li>
+                <li className={pathname === "/list_doctor" ? "active" : ""}>
+                  <Link href="/list_doctor">Doctos</Link>
+                </li>
+                <li className={pathname === "/services" ? "active" : ""}>
+                  <Link href="/services">Services</Link>
+                </li>
+                <li className={pathname === "/contact" ? "active" : ""}>
+                  <Link href="/contact">Contact Us</Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          {/* End Main Menu */}
+        </div>
+        <div className="col-lg-2 col-12">
+          <div className="get-quote">
+            <Link href="/user" className="btn">
+              Book Appointment
+            </Link>
+          </div>
+        </div>
+      </>
+    );
+  };
+  const patientMenu = () => {
+    return (
+      <div className="col-lg-7 col-md-9 col-12">
+        {/* Main Menu */}
+        <div className="main-menu">
+          <nav className="navigation">
+            <ul className="nav menu">
+              <li className={pathname === "/" ? "active" : ""}>
+                <Link href="/">Trang chủ</Link>
+              </li>
+              <li className={pathname === "/user" ? "active" : ""}>
+                <Link href="/user">Dịch vụ</Link>
+              </li>
+              <li className={pathname === "/list_doctor" ? "active" : ""}>
+                <Link href="/list_doctor">Danh sách bác sĩ</Link>
+              </li>
+              <li className={pathname === "/contact" ? "active" : ""}>
+                <Link href="/contact">Contact Us</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        {/* End Main Menu */}
+      </div>
+    );
+  };
+  const adminMenu = () => {
+    return (
+      <div className="col-lg-7 col-md-9 col-12">
+        {/* Main Menu */}
+        <div className="main-menu">
+          <nav className="navigation">
+            <ul className="nav menu">
+              <li className={pathname === "/" ? "active" : ""}>
+                <Link href="/">QL Bác sĩ</Link>
+              </li>
+              <li className={pathname === "/" ? "active" : ""}>
+                <Link href="/">QL Nhân viên</Link>
+              </li>
+              <li className={pathname === "/" ? "active" : ""}>
+                <Link href="/">QL Bệnh nhân</Link>
+              </li>
+              <li className={pathname === "/" ? "active" : ""}>
+                <Link href="/">QL Hóa đơn</Link>
+              </li>
+              <li className={pathname === "/" ? "active" : ""}>
+                <Link href="/">QL Doanh số</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        {/* End Main Menu */}
+      </div>
+    );
+  };
+  const staffMenu = () => {
+    return (
+      <div className="col-lg-7 col-md-9 col-12">
+        {/* Main Menu */}
+        <div className="main-menu">
+          <nav className="navigation">
+            <ul className="nav menu">
+              <li className={pathname === "/staff" ? "active" : ""}>
+                <Link href="/staff">QL lịch khám</Link>
+              </li>
+              <li className={pathname === "/staff/invoice" ? "active" : ""}>
+                <Link href="/staff/invoice">QL Hóa đơn</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        {/* End Main Menu */}
+      </div>
+    );
   };
   return (
     <header className="header">
@@ -47,7 +153,7 @@ const Header = () => {
                   <i className="fa fa-envelope"></i>
                   <a href="mailto:support@yourmail.com">support@yourmail.com</a>
                 </li>
-                {role && userName && profile && (
+                {role && userName && (
                   <li
                     className="p-2 bg-[#1A76D1] text-white rounded-md cursor-pointer"
                     onClick={() => {
@@ -58,7 +164,7 @@ const Header = () => {
                     Đăng xuất
                   </li>
                 )}
-                {!role && !userName && !profile && (
+                {!role && !userName && (
                   <Link
                     className="p-2 bg-[#1A76D1] text-white rounded-md cursor-pointer"
                     href={"/login"}
@@ -90,62 +196,10 @@ const Header = () => {
                 <div className="mobile-nav"></div>
                 {/* End Mobile Nav */}
               </div>
-              <div className="col-lg-7 col-md-9 col-12">
-                {/* Main Menu */}
-                <div className="main-menu">
-                  <nav className="navigation">
-                    <ul className="nav menu">
-                      <li className="active">
-                        <a href="#">
-                          Home <i className="icofont-rounded-down"></i>
-                        </a>
-                        <ul className="dropdown">
-                          <li>
-                            <a href="index.html">Home Page 1</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a href="#">Doctos </a>
-                      </li>
-                      <li>
-                        <a href="#">Services </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          Pages <i className="icofont-rounded-down"></i>
-                        </a>
-                        <ul className="dropdown">
-                          <li>
-                            <a href="404.html">404 Error</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a href="#">
-                          Blogs <i className="icofont-rounded-down"></i>
-                        </a>
-                        <ul className="dropdown">
-                          <li>
-                            <a href="blog-single.html">Blog Details</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a href="contact.html">Contact Us</a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-                {/* End Main Menu */}
-              </div>
-              <div className="col-lg-2 col-12">
-                <div className="get-quote">
-                  <Link href="/user" className="btn">
-                    Book Appointment
-                  </Link>
-                </div>
-              </div>
+              {!role && notLoginMenu()}
+              {role == "PATIENT" && patientMenu()}
+              {role == "ADMIN" && adminMenu()}
+              {role == "STAFF" && staffMenu()}
             </div>
           </div>
         </div>

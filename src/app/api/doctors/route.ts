@@ -3,16 +3,27 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// GET /api/doctors - Get all doctors
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const fullName = searchParams.get("fullName");
+    const specialization = searchParams.get("specialization");
+    const department = searchParams.get("department");
+    const phone = searchParams.get("phone");
+
+    const where: any = {};
+    if (fullName) where.fullName = { contains: fullName };
+    if (specialization) where.specialization = { contains: specialization };
+    if (department) where.department = { contains: department };
+    if (phone) where.phone = { contains: phone };
+
     const doctors = await prisma.doctor.findMany({
+      where,
       include: {
-        user: true,
+        account: true,
         appointments: true,
         prescriptions: true,
         bills: true,
-        medicalHistories: true,
         medicalRecords: true,
       },
     });
@@ -35,18 +46,18 @@ export async function POST(request: Request) {
         specialization: body.specialization,
         phone: body.phone,
         department: body.department,
-        user: {
+        userId: body.userId,
+        account: {
           connect: {
             id: body.userId,
           },
         },
       },
       include: {
-        user: true,
+        account: true,
         appointments: true,
         prescriptions: true,
         bills: true,
-        medicalHistories: true,
         medicalRecords: true,
       },
     });
@@ -73,7 +84,7 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     const doctor = await prisma.doctor.update({
-      where: { id },
+      where: { id: parseInt(id) },
       data: {
         fullName: body.fullName,
         specialization: body.specialization,
@@ -81,11 +92,10 @@ export async function PUT(request: Request) {
         department: body.department,
       },
       include: {
-        user: true,
+        account: true,
         appointments: true,
         prescriptions: true,
         bills: true,
-        medicalHistories: true,
         medicalRecords: true,
       },
     });
@@ -109,9 +119,8 @@ export async function DELETE(request: Request) {
         { status: 400 }
       );
     }
-
     await prisma.doctor.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
 
     return NextResponse.json({ message: "Doctor deleted successfully" });

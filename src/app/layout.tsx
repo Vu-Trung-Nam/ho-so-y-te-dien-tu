@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Slider from "@/components/layout/Slider";
+import Script from "next/script";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -75,35 +76,36 @@ export default function RootLayout({
         </Provider>
       </body> */}
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <Header />
+          <div className="py-5">{children}</div>
+          <Footer />
+        </Provider>
       </body>
+      <Script src="js/jquery.min.js"></Script>
+
+      <Script src="js/jquery-migrate-3.0.0.js"></Script>
+
+      <Script src="js/jquery-ui.min.js"></Script>
+
+      <Script src="js/easing.js"></Script>
+
+      <Script src="js/colors.js"></Script>
+      <Script src="js/popper.min.js"></Script>
+      <Script src="js/bootstrap-datepicker.js"></Script>
+      <Script src="js/jquery.nav.js"></Script>
+      <Script src="js/slicknav.min.js"></Script>
+      <Script src="js/jquery.scrollUp.min.js"></Script>
+      <Script src="js/niceselect.js"></Script>
+      <Script src="js/tilt.jquery.min.js"></Script>
+      <Script src="js/owl-carousel.js"></Script>
+      <Script src="js/jquery.counterup.min.js"></Script>
+      <Script src="js/steller.js"></Script>
+      <Script src="js/wow.min.js"></Script>
+      <Script src="js/jquery.magnific-popup.min.js"></Script>
+      <Script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></Script>
+      <Script src="js/bootstrap.min.js"></Script>
+      <Script src="js/main.js"></Script>
     </html>
   );
-}
-
-{
-  /* <script src="js/jquery.min.js"></script>
- 
-<script src="js/jquery-migrate-3.0.0.js"></script>
-
-<script src="js/jquery-ui.min.js"></script>
-
-    <script src="js/easing.js"></script>
-
-<script src="js/colors.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap-datepicker.js"></script>
-    <script src="js/jquery.nav.js"></script>
-<script src="js/slicknav.min.js"></script>
-    <script src="js/jquery.scrollUp.min.js"></script>
-<script src="js/niceselect.js"></script>
-<script src="js/tilt.jquery.min.js"></script>
-    <script src="js/owl-carousel.js"></script>
-<script src="js/jquery.counterup.min.js"></script>
-<script src="js/steller.js"></script>
-<script src="js/wow.min.js"></script>
-<script src="js/jquery.magnific-popup.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/main.js"></script> */
 }

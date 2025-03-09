@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { clearCookie, getProfile, getRole, getUsername } from "@/lib/cookie";
+import { Patient } from "@/types/type";
 
 export interface AuthState {
   role: string | null;
-  profile: object | null;
+  profile: Patient | null;
   userName: string | null;
   clearCookieStore: () => void;
   setCookieStore: ({ role, profile, userName }: AuthParams) => void;

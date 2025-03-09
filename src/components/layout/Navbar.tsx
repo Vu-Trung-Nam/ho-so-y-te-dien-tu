@@ -54,7 +54,6 @@ export default function Navbar() {
           <button
             onClick={() => {
               clearCookie();
-              window.location.reload();
             }}
             className="bg-white text-blue-600 p-1 px-2 rounded-lg"
           >

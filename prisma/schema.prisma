@@ -92,6 +92,7 @@ model Appointment {
   doctorId        Int?
   appointmentDate DateTime
   status          AppointmentStatus @default(NOTCOMFIRM)
+  symptoms        String? // mô tả triệu chứng bệnh
 
   patient       Patient        @relation(fields: [patientId], references: [id])
   doctor        Doctor?        @relation(fields: [doctorId], references: [id])

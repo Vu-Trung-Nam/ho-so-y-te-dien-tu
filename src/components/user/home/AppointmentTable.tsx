@@ -1,6 +1,12 @@
+"use client";
+import { formatDateTime } from "@/lib/dateTime";
+import useAuthStore from "@/store/store";
+import { useGetAppointments } from "@/tanstackquery/appointments";
 import React from "react";
 
 const AppointmentTable = () => {
+  const { profile } = useAuthStore();
+  const { data: appointments } = useGetAppointments({ patientId: profile?.id });
   return (
     <div>
       <h2 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-5 font-bold">
@@ -15,9 +21,6 @@ const AppointmentTable = () => {
                 STT
               </th>
               <th scope="col" className="px-6 py-3">
-                THỜI GIAN ĐẶT LỊCH
-              </th>
-              <th scope="col" className="px-6 py-3">
                 THỜI GIAN KHÁM
               </th>
               <th scope="col" className="px-6 py-3">
@@ -29,54 +32,28 @@ const AppointmentTable = () => {
             </tr>
           </thead>
           <tbody>
-            {/* <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                1
-              </th>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">Ho</td>
-              <td className="px-6 py-4">Thành công</td>
-            </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                2
-              </th>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">Đau vai</td>
-              <td className="px-6 py-4">Thât bại</td>
-            </tr>
-            <tr className="bg-white dark:bg-gray-800">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                3
-              </th>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">Đau chân</td>
-              <td className="px-6 py-4">Thất bại</td>
-            </tr> */}
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                1
-              </th>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">01/02/2025 09:00</td>
-              <td className="px-6 py-4">Ho</td>
-              <td className="px-6 py-4">Thành công</td>
-            </tr>
+            {appointments &&
+              appointments.map((appointment, idx) => {
+                return (
+                  <tr
+                    key={idx}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
+                  >
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {idx + 1}
+                    </th>
+
+                    <td className="px-6 py-4">
+                      {formatDateTime(appointment.appointmentDate)}
+                    </td>
+                    <td className="px-6 py-4">{appointment.symptoms}</td>
+                    <td className="px-6 py-4">{appointment.status}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>

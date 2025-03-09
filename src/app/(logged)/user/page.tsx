@@ -1,42 +1,64 @@
+"use client";
 import AppointmentTable from "@/components/user/home/AppointmentTable";
-import React from "react";
+import CreateAppointmentModal from "@/components/user/home/CreateAppointmentModal";
+import { Appointment } from "@/types/type";
+import React, { useState } from "react";
 
-const page = () => {
+const Page = () => {
+  const [mode, setMode] = useState<"ADD" | "EDIT">("ADD");
+  const [modal, setModal] = useState({ CreateAppointmentModal: false });
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<Appointment | null>(null);
+  const _handleOpenModal = (modalName: keyof typeof modal) => {
+    setModal((prev) => ({ ...prev, [modalName]: true }));
+  };
+  const _handleCloseModal = (modalName: keyof typeof modal) => {
+    setModal((prev) => ({ ...prev, [modalName]: false }));
+  };
   return (
-    <div className="space-y-5 container">
-      <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-4 font-bold">
-        ĐẶT LỊCH HẸN
-      </h1>
-      <div className="grid grid-cols-3 gap-10 justify-center">
-        {/* <a className="btn" href="#">
+    <>
+      <div className="space-y-5 container">
+        <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-4 font-bold">
+          DỊCH VỤ
+        </h1>
+        <div className="grid grid-cols-3 gap-10 justify-center">
+          {/* <a className="btn" href="#">
           <span className="text-sm font-medium">
             Thêm, chỉnh sửa thông tin cá nhân
           </span>
         </a> */}
-        <a className="btn" href="#">
-          <span className="text-sm font-medium">
-            Đăng kí lịch khám chữa bệnh
-          </span>
-
-          {/* <svg
-            className="size-5 rtl:rotate-180"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+          <button
+            className="btn"
+            onClick={() => _handleOpenModal("CreateAppointmentModal")}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg> */}
-        </a>
+            <span className="text-sm font-medium">
+              Đăng kí lịch khám chữa bệnh
+            </span>
+          </button>
+          <button
+            className="btn"
+            onClick={() => _handleOpenModal("CreateAppointmentModal")}
+          >
+            <span className="text-sm font-medium">Xem hồ sơ bệnh án</span>
+          </button>
+          <button
+            className="btn"
+            onClick={() => _handleOpenModal("CreateAppointmentModal")}
+          >
+            <span className="text-sm font-medium">
+              Xem hóa đơn đã thanh toán
+            </span>
+          </button>
+        </div>
+        <AppointmentTable />
       </div>
-      <AppointmentTable />
-    </div>
+      <CreateAppointmentModal
+        isModalOpen={modal.CreateAppointmentModal}
+        handleCloseModal={() => _handleCloseModal("CreateAppointmentModal")}
+        selectedAppointment={selectedAppointment}
+      />
+    </>
   );
 };
 
-export default page;
+export default Page;

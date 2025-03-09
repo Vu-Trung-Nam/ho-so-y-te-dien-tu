@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       role,
     } = body;
 
-    console.log("body:", body);
+
 
     // Create account with related data based on role
     // bệnh nhân đăng kí
