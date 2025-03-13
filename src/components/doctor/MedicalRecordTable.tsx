@@ -1,33 +1,19 @@
 "use client";
-import { formatDateTime } from "@/lib/dateTime";
-import useAuthStore from "@/store/store";
-import { useGetAppointments } from "@/tanstackquery/appointments";
-import React, { useState } from "react";
+import { useGetMedicalRecords } from "@/tanstackquery/medicalRecord";
+import React from "react";
 import Loading from "../Icons/Loading";
-import { Appointment, AppointmentStatus } from "@/types/type";
-import ConfirmAppointmentModal from "./ConfirmAppointmentModal";
-
-const AppointmentTableStaff = () => {
-  const { profile } = useAuthStore();
-  const { data: appointments, isPending } = useGetAppointments();
-  const [modal, setModal] = useState({ ConfirmAppointmentModal: false });
-  const [selectedAppointment, setSelectedAppointment] =
-    useState<Appointment | null>(null);
-  const _handleOpenModal = (modalName: keyof typeof modal) => {
-    setModal((prev) => ({ ...prev, [modalName]: true }));
-  };
-  const _handleCloseModal = (modalName: keyof typeof modal) => {
-    setModal((prev) => ({ ...prev, [modalName]: false }));
-  };
-  const appointmentStatus = {
-    NOTCOMFIRM: "Chưa xác nhận",
-    CONFIRMED: "Đã xác nhận",
-    CANCELED: "Đã hủy",
-  };
+import { formatDateTime } from "@/lib/dateTime";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
+const MedicalRecordTable = () => {
+  const { data: medicalRecords, isPending } = useGetMedicalRecords();
+  const router = useRouter();
+  const pathname = usePathname();
+  console.log(medicalRecords);
   return (
     <div>
       <h2 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-5 font-bold">
-        Danh sách lịch khám
+        Danh sách sổ khám bệnh
       </h2>
       {isPending && <Loading />}
       {!isPending && (
@@ -42,16 +28,22 @@ const AppointmentTableStaff = () => {
                   BỆNH NHÂN
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  THỜI GIAN KHÁM
+                  Bác sĩ khám
                 </th>
                 <th scope="col" className="px-6 py-3">
                   TRIỆU CHỨNG
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Bác sĩ khám
+                  CHUẨN ĐOÁN
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  TRẠNG THÁI ĐẶT LỊCH
+                  GHI CHÚ
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  THỜI GIAN TẠO SỔ
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  TRẠNG THÁI
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Tùy chọn
@@ -59,8 +51,8 @@ const AppointmentTableStaff = () => {
               </tr>
             </thead>
             <tbody>
-              {appointments &&
-                appointments.map((appointment, idx) => {
+              {medicalRecords &&
+                medicalRecords.map((medicalRecord, idx) => {
                   return (
                     <tr
                       key={idx}
@@ -73,27 +65,32 @@ const AppointmentTableStaff = () => {
                         {idx + 1}
                       </th>
                       <td className="px-6 py-4">
-                        {appointment.patient.fullName}
+                        {medicalRecord.patient.fullName}
                       </td>
                       <td className="px-6 py-4">
-                        {formatDateTime(appointment.appointmentDate)}
-                      </td>
-                      <td className="px-6 py-4">{appointment.symptoms}</td>
+                        {medicalRecord.doctor.fullName}
+                      </td>{" "}
+                      {/* triệu trứng */}
+                      <td className="px-6 py-4">{medicalRecord.symptoms}</td>
+                      {/* chuẩn đoán */}
+                      <td className="px-6 py-4">{medicalRecord.diagnosis}</td>
+                      <td className="px-6 py-4">{medicalRecord.note}</td>
                       <td className="px-6 py-4">
-                        {appointment?.doctor?.fullName ?? "Chưa chọn"}
+                        {formatDateTime(medicalRecord.createdAt)}
                       </td>
                       <td className="px-6 py-4">
-                        {appointmentStatus[appointment.status]}
+                        {medicalRecord.bill.status == "PENDING"
+                          ? "Chưa thanh toán"
+                          : medicalRecord.bill.status}
                       </td>
                       <td className="px-6 py-4">
                         <button
-                          className="p-2 rounded-sm"
-                          onClick={() => {
-                            setSelectedAppointment(appointment);
-                            _handleOpenModal("ConfirmAppointmentModal");
-                          }}
+                          onClick={() =>
+                            router.push(`${pathname}/${medicalRecord.id}`)
+                          }
+                          className="p-2 rounded-sm inline-block"
                         >
-                          Xác nhận, hủy lịch
+                          Cập nhật sổ khám bệnh
                         </button>
                       </td>
                     </tr>
@@ -103,14 +100,8 @@ const AppointmentTableStaff = () => {
           </table>
         </div>
       )}
-
-      <ConfirmAppointmentModal
-        isModalOpen={modal.ConfirmAppointmentModal}
-        handleCloseModal={() => _handleCloseModal("ConfirmAppointmentModal")}
-        selectedAppointment={selectedAppointment}
-      />
     </div>
   );
 };
 
-export default AppointmentTableStaff;
+export default MedicalRecordTable;

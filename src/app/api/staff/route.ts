@@ -20,30 +20,18 @@ export async function GET() {
   }
 }
 
-// POST /api/staff - Create new staff member
+// POST /api/staff - Create many staff
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const staff = await prisma.staff.create({
-      data: {
-        fullName: body.fullName,
-        position: body.position,
-        phone: body.phone,
-        department: body.department,
-        account: {
-          connect: {
-            id: body.accountId,
-          },
-        },
-      },
-      include: {
-        account: true,
-      },
+    const staff = await prisma.staff.createMany({
+      data: body,
+      skipDuplicates: true,
     });
     return NextResponse.json(staff);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to create staff member" },
+      { error: "Failed to create staff" },
       { status: 500 }
     );
   }

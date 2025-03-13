@@ -36,40 +36,22 @@ export async function GET(request: Request) {
   }
 }
 
-// POST /api/doctors - Create new doctor
+// POST /api/doctors - Create many doctor
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const doctor = await prisma.doctor.create({
-      data: {
-        fullName: body.fullName,
-        specialization: body.specialization,
-        phone: body.phone,
-        department: body.department,
-        userId: body.userId,
-        account: {
-          connect: {
-            id: body.userId,
-          },
-        },
-      },
-      include: {
-        account: true,
-        appointments: true,
-        prescriptions: true,
-        bills: true,
-        medicalRecords: true,
-      },
+    const doctors = await prisma.doctor.createMany({
+      data: body,
+      skipDuplicates: true,
     });
-    return NextResponse.json(doctor);
+    return NextResponse.json(doctors);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to create doctor" },
+      { error: "Failed to create doctors" },
       { status: 500 }
     );
   }
 }
-
 // PUT /api/doctors/[id] - Update doctor
 export async function PUT(request: Request) {
   try {

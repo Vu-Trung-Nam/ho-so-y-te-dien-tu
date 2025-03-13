@@ -10,15 +10,7 @@ export async function GET() {
       include: {
         patient: true,
         doctor: true,
-        bill: {
-          include: {
-            prescriptions: {
-              include: {
-                prescriptionMedicines: {},
-              },
-            },
-          },
-        },
+        bill: true,
         appointment: true,
       },
     });
@@ -31,34 +23,30 @@ export async function GET() {
   }
 }
 
-// POST /api/medical-records - Create new medical record
+// POST /api/test-result - Create new test result
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const medicalRecord = await prisma.medicalRecord.create({
+    const testResult = await prisma.testResult.create({
       data: {
-        diagnosis: body.diagnosis,
-        symptoms: body.symptoms,
-        doctorId: body.doctorId,
-        patientId: body.patientId,
-        appointmentId: body.appointmentId,
+        testName: body.testName,
+        testType: body.testType,
+        result: body.result,
+        interpretation: body.interpretation,
         note: body.note,
-        bill: {
-          create: {
-            doctorId: body.doctorId,
-            patientId: body.patientId,
-            status: "PENDING",
-          },
-        },
+        totalCost: body.totalCost,
+        patientId: body.patientId,
+        doctorId: body.doctorId,
+        billId: body.billId,
+        testDate: new Date(body.testDate),
       },
       include: {
         patient: true,
         doctor: true,
         bill: true,
-        appointment: true,
       },
     });
-    return NextResponse.json(medicalRecord);
+    return NextResponse.json(testResult);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to create medical record" },

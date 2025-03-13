@@ -3,11 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "./style.css";
 import Provider from "@/components/provider/Provider";
-import Navbar from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
-import Slider from "@/components/layout/Slider";
-import Script from "next/script";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -46,7 +43,7 @@ export default function RootLayout({
           Mediplus - Free Medical and Doctor Directory HTML Template.
         </title>
 
-        <link rel="icon" href="img/favicon.png" />
+        <link rel="icon" href="/img/new-favicon.ico" />
 
         <link
           href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
@@ -63,18 +60,9 @@ export default function RootLayout({
         <link rel="stylesheet" href="/css/animate.min.css" />
         <link rel="stylesheet" href="/css/magnific-popup.css" />
         <link rel="stylesheet" href="/css/normalize.css" />
-        <link rel="stylesheet" href="./style.css" />
+        {/* <link rel="stylesheet" href="/css/style.css" /> */}
         <link rel="stylesheet" href="/css/responsive.css" />
       </head>
-      {/* <body>
-        <Provider>
-          <div classNameName="min-h-screen flex flex-col">
-            <Navbar />
-            <div classNameName="flex-1">{children}</div>
-            <Footer />
-          </div>
-        </Provider>
-      </body> */}
       <body>
         <Provider>
           <Header />
@@ -82,7 +70,7 @@ export default function RootLayout({
           <Footer />
         </Provider>
       </body>
-      <Script src="js/jquery.min.js"></Script>
+      {/* <Script src="js/jquery.min.js"></Script>
 
       <Script src="js/jquery-migrate-3.0.0.js"></Script>
 
@@ -105,7 +93,7 @@ export default function RootLayout({
       <Script src="js/jquery.magnific-popup.min.js"></Script>
       <Script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></Script>
       <Script src="js/bootstrap.min.js"></Script>
-      <Script src="js/main.js"></Script>
+      <Script src="js/main.js"></Script> */}
     </html>
   );
 }

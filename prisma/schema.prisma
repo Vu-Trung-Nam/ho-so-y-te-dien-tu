@@ -25,7 +25,7 @@ model Account {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
-  email     String   @unique
+  email     String?   @unique
   role      Role
   createdAt DateTime @default(now())
   patient   Patient?
@@ -60,6 +60,7 @@ model Patient {
   prescriptions  Prescription[]
   bills          Bill[]
   medicalRecords MedicalRecord[]
+  TestResult     TestResult[]
 }
 
 // bac si
@@ -77,6 +78,7 @@ model Doctor {
   prescriptions  Prescription[]
   bills          Bill[]
   medicalRecords MedicalRecord[]
+  TestResult     TestResult[]
 }
 
 // lich kham
@@ -108,79 +110,108 @@ enum PrescriptionStatus {
 
 // don thuoc
 model Prescription {
-  id        Int                @id @default(autoincrement())
-  patientId Int
-  doctorId  Int
-  diagnosis String
-  note      String?
-  createdAt DateTime           @default(now())
-  status    PrescriptionStatus @default(UNPAID) // CANCELLED, UNPAID, PAID
-
+  id                    Int                    @id @default(autoincrement())
+  patientId             Int
+  doctorId              Int
+  note                  String?
+  createdAt             DateTime               @default(now())
+  billId                Int?
+  totalCost             Decimal?
   patient               Patient                @relation(fields: [patientId], references: [id])
   doctor                Doctor                 @relation(fields: [doctorId], references: [id])
   prescriptionMedicines PrescriptionMedicine[]
-  Bill                  Bill[]
-  MedicalRecord         MedicalRecord[]
+  bill                  Bill?                  @relation(fields: [billId], references: [id])
 }
 
 // Bảng trung gian
 model PrescriptionMedicine {
+  id             Int      @id @default(autoincrement()) // ID riêng cho mỗi bản ghi
   prescriptionId Int
   medicineId     Int
   quantity       Int // số lượng kê trong đơn
-  dosage         String // liều dùng (VD: 1 viên)
-  frequency      String // tần suất (VD: 3 lần/ngày)
-  duration       Int // thời gian dùng (số ngày)
+  priceAtTime    Int // Giá thuốc tại thời điểm kê đơn (để tránh ảnh hưởng khi giá thuốc thay đổi)
   note           String?
+  createdAt      DateTime @default(now()) // Thời gian thêm thuốc vào đơn
 
   prescription Prescription @relation(fields: [prescriptionId], references: [id])
   medicine     Medicine     @relation(fields: [medicineId], references: [id])
 
-  @@id([prescriptionId, medicineId])
+  @@unique([prescriptionId, medicineId]) // Vẫn đảm bảo mỗi thuốc chỉ xuất hiện 1 lần trong đơn
+}
+
+enum Unit {
+  PILL
+  BOTTLE
+  CAPSULE
+  INJECTION
 }
 
 // thuoc
 model Medicine {
-  id    Int     @id @default(autoincrement())
-  name  String
-  unit  String // đơn vị (viên, chai, ống...)
-  price Int // giá mỗi đơn vị
-  stock Int // số lượng trong kho
-  note  String?
-
+  id                    Int                    @id @default(autoincrement())
+  name                  String                 @unique
+  unit                  Unit                   @default(PILL) // đơn vị (viên, chai, ống...)
+  price                 Int // giá mỗi đơn vị
+  stock                 Int // số lượng trong kho
+  note                  String?
   prescriptionMedicines PrescriptionMedicine[]
 }
 
-// hoa don
-model Bill {
-  id             Int       @id @default(autoincrement())
+// xet nghiem
+model TestResult {
+  id             Int      @id @default(autoincrement())
   patientId      Int
   doctorId       Int
-  prescriptionId Int?
-  totalAmount    Decimal
-  status         String    @default("PENDING") // PENDING, PAID, CANCELLED
-  createdAt      DateTime  @default(now())
-  paidAt         DateTime?
+  billId         Int?
+  testDate       DateTime @default(now())
+  testName       String? // tên xét nghiệm
+  testType       String? // loại xét nghiệm (máu, nước tiểu, etc.)
+  result         String? // kết quả xét nghiệm
+  interpretation String? // nhận xét của bác sĩ
+  note           String?
+  totalCost      Decimal?
+  patient        Patient  @relation(fields: [patientId], references: [id])
+  doctor         Doctor   @relation(fields: [doctorId], references: [id])
+  bill           Bill?    @relation(fields: [billId], references: [id])
+}
 
-  patient      Patient       @relation(fields: [patientId], references: [id])
-  doctor       Doctor        @relation(fields: [doctorId], references: [id])
-  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
+// hoa don
+enum BillStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+model Bill {
+  id              Int        @id @default(autoincrement())
+  patientId       Int
+  doctorId        Int
+  medicalRecordId Int        @unique
+  totalCost       Decimal?
+  status          BillStatus @default(PENDING)
+  createdAt       DateTime   @default(now())
+  paidAt          DateTime?
+
+  patient       Patient        @relation(fields: [patientId], references: [id])
+  doctor        Doctor         @relation(fields: [doctorId], references: [id])
+  medicalRecord MedicalRecord  @relation(fields: [medicalRecordId], references: [id])
+  prescriptions Prescription[]
+  testResults   TestResult[]
 }
 
 // so kham benh
 model MedicalRecord {
-  id              Int      @id @default(autoincrement())
-  patientId       Int
-  doctorId        Int
-  prescriptionId  Int?
-  appointmentId   Int      @unique
-  examinationDate DateTime @default(now())
-  diagnosis       String? // chẩn đoán
-  symptoms        String? // triệu chứng
-  note            String?
+  id            Int      @id @default(autoincrement())
+  patientId     Int
+  doctorId      Int
+  appointmentId Int      @unique
+  createdAt     DateTime @default(now())
+  diagnosis     String? // chẩn đoán
+  symptoms      String? // triệu chứng
+  note          String?
 
-  patient      Patient       @relation(fields: [patientId], references: [id])
-  doctor       Doctor        @relation(fields: [doctorId], references: [id])
-  prescription Prescription? @relation(fields: [prescriptionId], references: [id])
-  appointment  Appointment   @relation(fields: [appointmentId], references: [id])
+  patient     Patient     @relation(fields: [patientId], references: [id])
+  doctor      Doctor      @relation(fields: [doctorId], references: [id])
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  bill        Bill?
 }

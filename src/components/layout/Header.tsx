@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import React from "react";
-
+import Image from "next/image";
 const Header = () => {
   const { role, profile, userName, clearCookieStore } = useAuthStore();
 
@@ -120,12 +120,36 @@ const Header = () => {
       </div>
     );
   };
+  const doctorMenu = () => {
+    return (
+      <div className="col-lg-7 col-md-9 col-12">
+        {/* Main Menu */}
+        <div className="main-menu">
+          <nav className="navigation">
+            <ul className="nav menu">
+              <li className={pathname === "/doctor" ? "active" : ""}>
+                <Link href="/doctor">QL lịch khám</Link>
+              </li>
+              <li
+                className={
+                  pathname === "/doctor/medical-record" ? "active" : ""
+                }
+              >
+                <Link href="/doctor/medical-record">QL sổ khám bệnh</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        {/* End Main Menu */}
+      </div>
+    );
+  };
   return (
     <header className="header">
       <div className="topbar">
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-5 col-12">
+            <div className="col-lg-4 col-md-5 col-12">
               {/* Contact */}
               <ul className="top-link">
                 <li>
@@ -143,7 +167,7 @@ const Header = () => {
               </ul>
               {/* End Contact */}
             </div>
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-8 col-md-6 col-12">
               {/* Top Contact */}
               <ul className="top-contact">
                 <li>
@@ -172,6 +196,11 @@ const Header = () => {
                     Đăng nhập
                   </Link>
                 )}
+                {role && userName && (
+                  <li>
+                    <span className="font-bold">User: {userName}</span>
+                  </li>
+                )}
               </ul>
               {/* End Top Contact */}
             </div>
@@ -188,7 +217,13 @@ const Header = () => {
                 {/* Start Logo */}
                 <div className="logo">
                   <Link href="/">
-                    <img src="/img/logo.png" alt="#" />
+                    <Image
+                      className="w-20"
+                      src="/img/new-logo.jpg"
+                      alt="#"
+                      width={1200}
+                      height={800}
+                    />
                   </Link>
                 </div>
                 {/* End Logo */}
@@ -200,6 +235,7 @@ const Header = () => {
               {role == "PATIENT" && patientMenu()}
               {role == "ADMIN" && adminMenu()}
               {role == "STAFF" && staffMenu()}
+              {role == "DOCTOR" && doctorMenu()}
             </div>
           </div>
         </div>

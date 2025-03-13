@@ -52,12 +52,14 @@ export interface Doctor {
   medicalRecords?: MedicalRecord[];
 }
 
+export type AppointmentStatus = "NOTCOMFIRM" | "CONFIRMED" | "CANCELED";
+
 export interface Appointment {
   id?: number;
   patientId: number;
   doctorId?: number;
   appointmentDate: Date;
-  status: "NOTCOMFIRM" | "CONFIRMED" | "CANCELED";
+  status: AppointmentStatus;
   patient: Patient;
   doctor?: Doctor;
   medicalRecord?: MedicalRecord;
@@ -65,27 +67,25 @@ export interface Appointment {
 }
 
 export interface Prescription {
-  id?: number;
+  id: number;
   patientId: number;
   doctorId: number;
   diagnosis: string;
   note?: string;
   createdAt: Date;
-  status: "CANCELLED" | "UNPAID" | "PAID";
+  billId?: number;
+  totalCost?: number;
   patient: Patient;
   doctor: Doctor;
-  prescriptionMedicines?: PrescriptionMedicine[];
-  Bill?: Bill[];
-  MedicalRecord?: MedicalRecord[];
+  prescriptionMedicines: PrescriptionMedicine[];
+  bill?: Bill;
 }
 
 export interface PrescriptionMedicine {
+  id?: number;
   prescriptionId: number;
   medicineId: number;
   quantity: number;
-  dosage: string;
-  frequency: string;
-  duration: number;
   note?: string;
   prescription: Prescription;
   medicine: Medicine;
@@ -103,8 +103,40 @@ export interface Medicine {
 
 export interface Bill {
   id?: number;
+  status: "PENDING" | "PAID" | "CANCELLED";
+  totalCost: number;
+  createdAt: Date;
+  paidAt: Date;
+  patientId: number;
+  patient: Patient;
+  testResults?: TestResult[];
+  prescriptions?: Prescription[];
 }
 
+interface TestResult {
+  id?: number;
+  patientId: number;
+  doctorId: number;
+  billId: number;
+  testDate: Date;
+  testName: string;
+  testType: string;
+  result: string;
+  interpretation: string;
+  note: string;
+  totalCost: number;
+}
 export interface MedicalRecord {
   id?: number;
+  createdAt: Date;
+  diagnosis: string; // chẩn đoán
+  symptoms: string; // triệu chứng
+  note: string;
+  patientId: number;
+  doctorId: number;
+  patient: Patient;
+  doctor: Doctor;
+  bill: Bill;
+  appointment: Appointment;
+  appointmentId: number;
 }

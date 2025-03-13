@@ -1,7 +1,12 @@
+import AppointmentTableDoctor from "@/components/doctor/AppointmentTableDoctor";
 import React from "react";
 
-const page = () => {
-  return <div>Doctor</div>;
+const Page = () => {
+  return (
+    <div className="space-y-5 container">
+      <AppointmentTableDoctor />
+    </div>
+  );
 };
 
-export default page;
+export default Page;

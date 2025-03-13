@@ -22,6 +22,7 @@ export async function GET(request: Request) {
       include: {
         patient: true,
         doctor: true,
+        medicalRecord: true,
       },
     });
     return NextResponse.json(appointments.reverse());
@@ -91,7 +92,6 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    console.log("body:", body);
     const appointment = await prisma.appointment.update({
       where: { id: parseInt(id) },
       data: {

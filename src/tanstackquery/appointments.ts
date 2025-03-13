@@ -20,6 +20,7 @@ export const useGetAppointments = (params?: {
       });
       return data;
     },
+    refetchInterval: 10000, // Refetch data every 10 seconds (10000ms)
   });
 };
 

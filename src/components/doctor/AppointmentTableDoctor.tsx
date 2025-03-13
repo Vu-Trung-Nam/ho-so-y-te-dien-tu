@@ -5,12 +5,15 @@ import { useGetAppointments } from "@/tanstackquery/appointments";
 import React, { useState } from "react";
 import Loading from "../Icons/Loading";
 import { Appointment, AppointmentStatus } from "@/types/type";
-import ConfirmAppointmentModal from "./ConfirmAppointmentModal";
+import CreateMedicalRecordModal from "./CreateMedicalRecordModal";
 
-const AppointmentTableStaff = () => {
+const AppointmentTableDoctor = () => {
   const { profile } = useAuthStore();
-  const { data: appointments, isPending } = useGetAppointments();
-  const [modal, setModal] = useState({ ConfirmAppointmentModal: false });
+  const { data: appointments, isPending } = useGetAppointments({
+    doctorId: profile?.id,
+    status: "CONFIRMED",
+  });
+  const [modal, setModal] = useState({ CreateMedicalRecordModal: false });
   const [selectedAppointment, setSelectedAppointment] =
     useState<Appointment | null>(null);
   const _handleOpenModal = (modalName: keyof typeof modal) => {
@@ -54,6 +57,9 @@ const AppointmentTableStaff = () => {
                   TRẠNG THÁI ĐẶT LỊCH
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  SỔ KHÁM BỆNH
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Tùy chọn
                 </th>
               </tr>
@@ -86,15 +92,31 @@ const AppointmentTableStaff = () => {
                         {appointmentStatus[appointment.status]}
                       </td>
                       <td className="px-6 py-4">
-                        <button
-                          className="p-2 rounded-sm"
-                          onClick={() => {
-                            setSelectedAppointment(appointment);
-                            _handleOpenModal("ConfirmAppointmentModal");
-                          }}
-                        >
-                          Xác nhận, hủy lịch
-                        </button>
+                        {appointment.medicalRecord ? "Đã tạo" : "Chưa tạo"}
+                      </td>
+                      <td className="px-6 py-4">
+                        {/* {appointment.medicalRecord && (
+                          <button
+                            className="p-2 rounded-sm"
+                            onClick={() => {
+                              setSelectedAppointment(appointment);
+                              //   _handleOpenModal("ConfirmAppointmentModal");
+                            }}
+                          >
+                            Cập nhật sổ khám bệnh
+                          </button>
+                        )} */}
+                        {!appointment.medicalRecord && (
+                          <button
+                            className="p-2 rounded-sm"
+                            onClick={() => {
+                              setSelectedAppointment(appointment);
+                              _handleOpenModal("CreateMedicalRecordModal");
+                            }}
+                          >
+                            Tạo sổ khám bệnh
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );
@@ -103,14 +125,13 @@ const AppointmentTableStaff = () => {
           </table>
         </div>
       )}
-
-      <ConfirmAppointmentModal
-        isModalOpen={modal.ConfirmAppointmentModal}
-        handleCloseModal={() => _handleCloseModal("ConfirmAppointmentModal")}
+      <CreateMedicalRecordModal
         selectedAppointment={selectedAppointment}
+        isModalOpen={modal.CreateMedicalRecordModal}
+        handleCloseModal={() => _handleCloseModal("CreateMedicalRecordModal")}
       />
     </div>
   );
 };
 
-export default AppointmentTableStaff;
+export default AppointmentTableDoctor;

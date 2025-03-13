@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
       path.startsWith("/staff"))
   ) {
     // Redirect to login page
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next();
 }
