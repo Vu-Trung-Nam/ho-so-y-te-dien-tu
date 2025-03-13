@@ -12,7 +12,6 @@ export async function GET() {
         appointments: true,
         prescriptions: true,
         bills: true,
-        medicalHistories: true,
         medicalRecords: true,
       },
     });
@@ -36,14 +35,13 @@ export async function POST(request: Request) {
         gender: body.gender,
         phone: body.phone,
         address: body.address,
-        medicalHistory: body.medicalHistory,
       },
       include: {
         account: true,
         appointments: true,
         prescriptions: true,
         bills: true,
-        medicalHistories: true,
+
         medicalRecords: true,
       },
     });
@@ -70,21 +68,20 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     const patient = await prisma.patient.update({
-      where: { id },
+      where: { id: Number(id) },
       data: {
         fullName: body.fullName,
         dob: body.dob ? new Date(body.dob) : undefined,
         gender: body.gender,
         phone: body.phone,
         address: body.address,
-        medicalHistory: body.medicalHistory,
       },
       include: {
         account: true,
         appointments: true,
         prescriptions: true,
         bills: true,
-        medicalHistories: true,
+
         medicalRecords: true,
       },
     });
@@ -110,7 +107,7 @@ export async function DELETE(request: Request) {
     }
 
     await prisma.patient.delete({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     return NextResponse.json({ message: "Patient deleted successfully" });

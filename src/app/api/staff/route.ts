@@ -51,7 +51,7 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     const staff = await prisma.staff.update({
-      where: { id },
+      where: { id: Number(id) },
       data: {
         fullName: body.fullName,
         position: body.position,
@@ -84,7 +84,7 @@ export async function DELETE(request: Request) {
     }
 
     await prisma.staff.delete({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     return NextResponse.json({ message: "Staff member deleted successfully" });
