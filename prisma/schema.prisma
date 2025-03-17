@@ -25,7 +25,7 @@ model Account {
   id        Int      @id @default(autoincrement())
   username  String   @unique
   password  String
-  email     String?   @unique
+  email     String?  @unique
   role      Role
   createdAt DateTime @default(now())
   patient   Patient?
@@ -48,37 +48,47 @@ model Staff {
 
 // benh nhan
 model Patient {
-  id             Int             @id @default(autoincrement())
-  accountId      Int?            @unique
-  fullName       String?
-  dob            DateTime?
-  gender         String?
-  phone          String?
-  address        String?
-  account        Account?        @relation(fields: [accountId], references: [id])
-  appointments   Appointment[]
-  prescriptions  Prescription[]
-  bills          Bill[]
-  medicalRecords MedicalRecord[]
-  TestResult     TestResult[]
+  id                Int             @id @default(autoincrement())
+  accountId         Int?            @unique
+  fullName          String
+  dob               DateTime?
+  gender            String?
+  phone             String?
+  address           String?
+  citizenId         String          @unique
+  healthInsuranceId String?
+  account           Account?        @relation(fields: [accountId], references: [id])
+  appointments      Appointment[]
+  prescriptions     Prescription[]
+  bills             Bill[]
+  medicalRecords    MedicalRecord[]
+  TestResult        TestResult[]
 }
 
 // bac si
-model Doctor {
-  id             Int     @id @default(autoincrement())
-  accountId      Int?    @unique
-  userId         String  @unique
-  fullName       String?
-  specialization String?
-  phone          String?
-  department     String?
 
-  account        Account?        @relation(fields: [accountId], references: [id])
-  appointments   Appointment[]
-  prescriptions  Prescription[]
-  bills          Bill[]
-  medicalRecords MedicalRecord[]
-  TestResult     TestResult[]
+enum Department {
+  KHOA_NOI_TOAN_QUAT
+  KHOA_NGOAI
+  KHOA_NHI
+  KHOA_HOI_SUC_CAP_CUU
+}
+
+model Doctor {
+  id                Int             @id @default(autoincrement())
+  accountId         Int?            @unique
+  userId            String          @unique
+  fullName          String?
+  specialization    String?
+  phone             String?
+  department        Department
+  healthInsuranceId String?
+  account           Account?        @relation(fields: [accountId], references: [id])
+  appointments      Appointment[]
+  prescriptions     Prescription[]
+  bills             Bill[]
+  medicalRecords    MedicalRecord[]
+  TestResult        TestResult[]
 }
 
 // lich kham

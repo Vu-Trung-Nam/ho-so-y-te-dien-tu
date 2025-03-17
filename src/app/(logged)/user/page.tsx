@@ -35,19 +35,14 @@ const Page = () => {
               Đăng kí lịch khám chữa bệnh
             </span>
           </button>
-          <button
-            className="btn"
-            onClick={() => _handleOpenModal("CreateAppointmentModal")}
-          >
+          <button className="btn">
             <span className="text-sm font-medium">Xem hồ sơ bệnh án</span>
           </button>
-          <button
-            className="btn"
-            onClick={() => _handleOpenModal("CreateAppointmentModal")}
-          >
-            <span className="text-sm font-medium">
-              Xem hóa đơn đã thanh toán
-            </span>
+          <button className="btn">
+            <span className="text-sm font-medium">Xem hóa đơn</span>
+          </button>
+          <button className="btn">
+            <span className="text-sm font-medium">Xem đơn thuốc</span>
           </button>
         </div>
         <AppointmentTable />

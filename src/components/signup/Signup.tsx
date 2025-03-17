@@ -25,6 +25,8 @@ const userSchema = z.object({
   address: z.string(),
   gender: z.string(),
   dob: z.string(),
+  citizenId: z.string(),
+  healthInsuranceId: z.string(),
 });
 
 type FormData = z.infer<typeof userSchema>;
@@ -57,8 +59,10 @@ const Signup = () => {
       address: data.address,
       gender: data.gender,
       dob: new Date(data.dob).toISOString(),
+      citizenId: data.citizenId,
+      healthInsuranceId: data.healthInsuranceId || null,
     };
-
+    console.log("registerData:", registerData);
     try {
       await registerMutation.mutateAsync(registerData);
       toast.success("Đăng kí thành công!");
@@ -83,7 +87,7 @@ const Signup = () => {
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Create an account
+            Đăng kí tài khoản
           </h1>
           <form
             className="space-y-4 md:space-y-6"
@@ -94,7 +98,7 @@ const Signup = () => {
                 htmlFor="username"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Username <span className="text-red-500">*</span>
+                Tên tài khoản <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("username")}
@@ -114,7 +118,7 @@ const Signup = () => {
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Password <span className="text-red-500">*</span>
+                Mật khẩu <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("password")}
@@ -135,7 +139,7 @@ const Signup = () => {
                 htmlFor="confirmPassword"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Confirm password <span className="text-red-500">*</span>
+                Nhập lại mật khẩu <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("confirmPassword")}
@@ -175,7 +179,7 @@ const Signup = () => {
                 htmlFor="fullName"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Full Name <span className="text-red-500">*</span>
+                Họ và tên <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("fullName")}
@@ -193,10 +197,50 @@ const Signup = () => {
 
             <div>
               <label
+                htmlFor="citizenId"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Số CCCD <span className="text-red-500">*</span>
+              </label>
+              <input
+                {...register("citizenId")}
+                type="text"
+                id="citizenId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+              />
+              {errors.citizenId && (
+                <p className="text-red-500 text-sm">
+                  {errors.citizenId.message}
+                </p>
+              )}
+            </div>
+            {/* healthInsurance */}
+            <div>
+              <label
+                htmlFor="healthInsuranceId"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Số thẻ bảo hiểm (không bắt buộc)
+              </label>
+              <input
+                {...register("healthInsuranceId")}
+                type="text"
+                id="healthInsuranceId"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+              {errors.healthInsuranceId && (
+                <p className="text-red-500 text-sm">
+                  {errors.healthInsuranceId.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <label
                 htmlFor="phone"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Phone Number <span className="text-red-500">*</span>
+                Số điện thoại <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("phone")}
@@ -215,7 +259,7 @@ const Signup = () => {
                 htmlFor="address"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Address <span className="text-red-500">*</span>
+                Địa chỉ <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("address")}
@@ -234,7 +278,7 @@ const Signup = () => {
                 htmlFor="gender"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Gender <span className="text-red-500">*</span>
+                Giới tính <span className="text-red-500">*</span>
               </label>
               <select
                 {...register("gender")}

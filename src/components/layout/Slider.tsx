@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
+// change text to vietnamese
 const Slider = () => {
   return (
     <section className="slider">
@@ -15,8 +16,8 @@ const Slider = () => {
               <div className="col-lg-7">
                 <div className="text">
                   <h1>
-                    We Provide <span>Medical</span> Services That You Can{" "}
-                    <span>Trust!</span>
+                    Chúng tôi cung cấp <span>Dịch vụ</span> Y tế mà bạn có thể{" "}
+                    <span>tin tưởng!</span>
                   </h1>
                   <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -25,10 +26,10 @@ const Slider = () => {
                   </p>
                   <div className="button">
                     <Link href="/login" className="btn">
-                      Get Appointment
+                      Đặt lịch hẹn
                     </Link>
                     <a href="#" className="btn primary">
-                      Learn More
+                      Tìm hiểu thêm
                     </a>
                   </div>
                 </div>

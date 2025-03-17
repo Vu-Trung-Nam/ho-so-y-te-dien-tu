@@ -44,7 +44,7 @@ const Login = () => {
         profile: response?.profile,
       });
       if (response?.role === "PATIENT") {
-        router.push("/user");
+        router.push("/");
       } else if (response?.role === "DOCTOR") {
         router.push("/doctor");
       } else if (response?.role === "STAFF") {
@@ -73,7 +73,7 @@ const Login = () => {
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Sign in to your account
+            Đăng nhập vào tài khoản của bạn
           </h1>
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
@@ -81,7 +81,7 @@ const Login = () => {
                 htmlFor="email"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Your username
+                Tên tài khoản
               </label>
               <input
                 // type="email"
@@ -99,7 +99,7 @@ const Login = () => {
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Password
+                Mật khẩu
               </label>
               <input
                 type="password"
@@ -130,7 +130,7 @@ const Login = () => {
                     htmlFor="remember"
                     className="text-gray-500 dark:text-gray-300"
                   >
-                    Remember me
+                    Ghi nhớ tài khoản
                   </label>
                 </div>
               </div>
@@ -138,22 +138,22 @@ const Login = () => {
                 href="#"
                 className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
               >
-                Forgot password?
+                Quên mật khẩu?
               </a>
             </div>
             <button
               type="submit"
               className="w-full text-white bg-blue-700 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
-              Sign in
+              Đăng nhập
             </button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-              Don&apos;t have an account yet?{" "}
+              Chưa có tài khoản?{" "}
               <Link
                 href="/signup"
                 className="font-medium text-primary-600 hover:underline dark:text-primary-500"
               >
-                Sign up
+                Đăng kí tài khoản
               </Link>
             </p>
           </form>

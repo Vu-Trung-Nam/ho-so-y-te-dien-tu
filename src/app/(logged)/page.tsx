@@ -2,6 +2,7 @@
 import Slider from "@/components/layout/Slider";
 import { motion } from "framer-motion";
 
+// change text to vietnamese
 export default function ClinicBanner() {
   return (
     <section>
@@ -19,13 +20,13 @@ export default function ClinicBanner() {
                     </div>
                     <div className="single-content">
                       <span>Lorem Amet</span>
-                      <h4>Emergency Cases</h4>
+                      <h4>Trường hợp khẩn cấp</h4>
                       <p>
                         Lorem ipsum sit amet consectetur adipiscing elit.
                         Vivamus et erat in lacus convallis sodales.
                       </p>
                       <a href="#">
-                        LEARN MORE<i className="fa fa-long-arrow-right"></i>
+                        Tìm hiểu thêm<i className="fa fa-long-arrow-right"></i>
                       </a>
                     </div>
                   </div>
@@ -39,13 +40,13 @@ export default function ClinicBanner() {
                     </div>
                     <div className="single-content">
                       <span>Fusce Porttitor</span>
-                      <h4>Doctors Timetable</h4>
+                      <h4>Lịch trình bác sĩ</h4>
                       <p>
                         Lorem ipsum sit amet consectetur adipiscing elit.
                         Vivamus et erat in lacus convallis sodales.
                       </p>
                       <a href="#">
-                        LEARN MORE<i className="fa fa-long-arrow-right"></i>
+                        Tìm hiểu thêm<i className="fa fa-long-arrow-right"></i>
                       </a>
                     </div>
                   </div>
@@ -59,20 +60,20 @@ export default function ClinicBanner() {
                     </div>
                     <div className="single-content">
                       <span>Donec luctus</span>
-                      <h4>Opening Hours</h4>
+                      <h4>Giờ làm việc</h4>
                       <ul className="time-sidual">
                         <li className="day">
-                          Monday - Fridayp <span>8.00-20.00</span>
+                          Thứ Hai - Thứ Năm <span>8.00-20.00</span>
                         </li>
                         <li className="day">
-                          Saturday <span>9.00-18.30</span>
+                          Thứ Sáu <span>9.00-18.30</span>
                         </li>
                         <li className="day">
-                          Monday - Thusday <span>9.00-15.00</span>
+                          Chủ nhật <span>9.00-15.00</span>
                         </li>
                       </ul>
                       <a href="#">
-                        LEARN MORE<i className="fa fa-long-arrow-right"></i>
+                        Tìm hiểu thêm<i className="fa fa-long-arrow-right"></i>
                       </a>
                     </div>
                   </div>
@@ -88,7 +89,7 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>We Are Always Ready to Help You & Your Family</h2>
+                <h2>Chúng tôi luôn sẵn sàng giúp bạn và gia đình bạn</h2>
                 <img src="img/section-img.png" alt="#" />
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit
@@ -103,7 +104,7 @@ export default function ClinicBanner() {
                 <div className="signle-icon">
                   <i className="icofont icofont-ambulance-cross"></i>
                 </div>
-                <h3>Emergency Help</h3>
+                <h3>Trợ giúp khẩn cấp</h3>
                 <p>
                   Lorem ipsum sit, consectetur adipiscing elit. Maecenas mi quam
                   vulputate.
@@ -115,7 +116,7 @@ export default function ClinicBanner() {
                 <div className="signle-icon">
                   <i className="icofont icofont-medical-sign-alt"></i>
                 </div>
-                <h3>Enriched Pharmecy</h3>
+                <h3>Phòng thuốc đầy đủ</h3>
                 <p>
                   Lorem ipsum sit, consectetur adipiscing elit. Maecenas mi quam
                   vulputate.
@@ -127,7 +128,7 @@ export default function ClinicBanner() {
                 <div className="signle-icon">
                   <i className="icofont icofont-stethoscope"></i>
                 </div>
-                <h3>Medical Treatment</h3>
+                <h3>Chăm sóc y tế</h3>
                 <p>
                   Lorem ipsum sit, consectetur adipiscing elit. Maecenas mi quam
                   vulputate.
@@ -146,7 +147,7 @@ export default function ClinicBanner() {
                 <i className="icofont icofont-home"></i>
                 <div className="content">
                   <span className="counter">3468</span>
-                  <p>Hospital Rooms</p>
+                  <p>Phòng khám</p>
                 </div>
               </div>
             </div>
@@ -155,7 +156,7 @@ export default function ClinicBanner() {
                 <i className="icofont icofont-user-alt-3"></i>
                 <div className="content">
                   <span className="counter">557</span>
-                  <p>Specialist Doctors</p>
+                  <p>Bác sĩ chuyên khoa</p>
                 </div>
               </div>
             </div>
@@ -164,7 +165,7 @@ export default function ClinicBanner() {
                 <i className="icofont-simple-smile"></i>
                 <div className="content">
                   <span className="counter">4379</span>
-                  <p>Happy Patients</p>
+                  <p>Bệnh nhân hài lòng</p>
                 </div>
               </div>
             </div>
@@ -173,7 +174,7 @@ export default function ClinicBanner() {
                 <i className="icofont icofont-table"></i>
                 <div className="content">
                   <span className="counter">32</span>
-                  <p>Years of Experience</p>
+                  <p>Năm kinh nghiệm</p>
                 </div>
               </div>
             </div>
@@ -186,7 +187,10 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>We Offer Different Services To Improve Your Health</h2>
+                <h2>
+                  Chúng tôi cung cấp các dịch vụ khác nhau để cải thiện sức khỏe
+                  của bạn
+                </h2>
                 <img src="img/section-img.png" alt="#" />
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit
@@ -198,7 +202,7 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-6 col-12">
               <div className="choose-left">
-                <h3>Who We Are</h3>
+                <h3>Chúng tôi là ai</h3>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Maecenas pharetra antege vel est lobortis, a commodo magna
@@ -274,17 +278,17 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12 col-md-12 col-12">
               <div className="content">
-                <h2>Do you need Emergency Medical Care? Call @ 1234 56789</h2>
+                <h2>Bạn cần trợ giúp y tế khẩn cấp? Gọi @ 1234 56789</h2>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Quisque porttitor dictum turpis nec gravida.
                 </p>
                 <div className="button">
                   <a href="#" className="btn">
-                    Contact Now
+                    Liên hệ ngay
                   </a>
                   <a href="#" className="btn second">
-                    Learn More<i className="fa fa-long-arrow-right"></i>
+                    Tìm hiểu thêm<i className="fa fa-long-arrow-right"></i>
                   </a>
                 </div>
               </div>
@@ -298,7 +302,7 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>We Maintain Cleanliness Rules Inside Our Hospital</h2>
+                <h2>Chúng tôi duy trì các quy tắc vệ sinh trong bệnh viện</h2>
                 <img src="/img/section-img.png" alt="#" />
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit
@@ -315,49 +319,49 @@ export default function ClinicBanner() {
                 <div className="single-pf">
                   <img src="/img/pf1.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
                 <div className="single-pf">
                   <img src="img/pf2.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
                 <div className="single-pf">
                   <img src="img/pf3.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
                 <div className="single-pf">
                   <img src="img/pf4.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
                 <div className="single-pf">
                   <img src="img/pf1.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
                 <div className="single-pf">
                   <img src="img/pf2.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
                 <div className="single-pf">
                   <img src="img/pf3.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
                 <div className="single-pf">
                   <img src="img/pf4.jpg" alt="#" />
                   <a href="portfolio-details.html" className="btn">
-                    View Details
+                    Xem chi tiết
                   </a>
                 </div>
               </div>
@@ -371,7 +375,10 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>We Offer Different Services To Improve Your Health</h2>
+                <h2>
+                  Chúng tôi cung cấp các dịch vụ khác nhau để cải thiện sức khỏe
+                  của bạn
+                </h2>
                 <img src="img/section-img.png" alt="#" />
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit
@@ -385,7 +392,7 @@ export default function ClinicBanner() {
               <div className="single-service">
                 <i className="icofont icofont-prescription"></i>
                 <h4>
-                  <a href="service-details.html">General Treatment</a>
+                  <a href="service-details.html">Chăm sóc tổng quát</a>
                 </h4>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
@@ -397,7 +404,7 @@ export default function ClinicBanner() {
               <div className="single-service">
                 <i className="icofont icofont-tooth"></i>
                 <h4>
-                  <a href="service-details.html">Teeth Whitening</a>
+                  <a href="service-details.html">Chăm sóc răng miệng</a>
                 </h4>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
@@ -409,7 +416,7 @@ export default function ClinicBanner() {
               <div className="single-service">
                 <i className="icofont icofont-heart-alt"></i>
                 <h4>
-                  <a href="service-details.html">Heart Surgery</a>
+                  <a href="service-details.html">Chăm sóc tim mạch</a>
                 </h4>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
@@ -421,7 +428,7 @@ export default function ClinicBanner() {
               <div className="single-service">
                 <i className="icofont icofont-listening"></i>
                 <h4>
-                  <a href="service-details.html">Ear Treatment</a>
+                  <a href="service-details.html">Chăm sóc tai mũi họng</a>
                 </h4>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
@@ -433,7 +440,7 @@ export default function ClinicBanner() {
               <div className="single-service">
                 <i className="icofont icofont-eye-alt"></i>
                 <h4>
-                  <a href="service-details.html">Vision Problems</a>
+                  <a href="service-details.html">Chăm sóc mắt</a>
                 </h4>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
@@ -445,7 +452,7 @@ export default function ClinicBanner() {
               <div className="single-service">
                 <i className="icofont icofont-blood"></i>
                 <h4>
-                  <a href="service-details.html">Blood Transfusion</a>
+                  <a href="service-details.html">Chuyển máu</a>
                 </h4>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
@@ -462,7 +469,10 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>We Provide You The Best Treatment In Resonable Price</h2>
+                <h2>
+                  Chúng tôi cung cấp cho bạn phương pháp điều trị tốt nhất với
+                  giá cả hợp lý
+                </h2>
                 <img src="img/section-img.png" alt="#" />
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit
@@ -478,7 +488,7 @@ export default function ClinicBanner() {
                   <div className="icon">
                     <i className="icofont icofont-ui-cut"></i>
                   </div>
-                  <h4 className="title">Plastic Suggery</h4>
+                  <h4 className="title">Chăm sóc ngoại khoa</h4>
                   <div className="price">
                     <p className="amount">
                       $199<span>/ Per Visit</span>
@@ -522,7 +532,7 @@ export default function ClinicBanner() {
                   <div className="icon">
                     <i className="icofont icofont-tooth"></i>
                   </div>
-                  <h4 className="title">Teeth Whitening</h4>
+                  <h4 className="title">Chăm sóc răng miệng</h4>
                   <div className="price">
                     <p className="amount">
                       $299<span>/ Per Visit</span>
@@ -566,7 +576,7 @@ export default function ClinicBanner() {
                   <div className="icon">
                     <i className="icofont-heart-beat"></i>
                   </div>
-                  <h4 className="title">Heart Suggery</h4>
+                  <h4 className="title">Chăm sóc tim mạch</h4>
                   <div className="price">
                     <p className="amount">
                       $399<span>/ Per Visit</span>
@@ -612,7 +622,7 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>Keep up with Our Most Recent Medical News.</h2>
+                <h2>Cập nhật những tin tức y tế mới nhất.</h2>
                 <img src="img/section-img.png" alt="#" />
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit
@@ -632,7 +642,7 @@ export default function ClinicBanner() {
                     <div className="date">22 Aug, 2020</div>
                     <h2>
                       <a href="blog-single.html">
-                        We have annnocuced our new product.
+                        Chúng tôi đã giới thiệu sản phẩm mới.
                       </a>
                     </h2>
                     <p className="text">
@@ -654,7 +664,7 @@ export default function ClinicBanner() {
                     <div className="date">15 Jul, 2020</div>
                     <h2>
                       <a href="blog-single.html">
-                        Top five way for solving teeth problems.
+                        Top five cách giải quyết vấn đề răng.
                       </a>
                     </h2>
                     <p className="text">
@@ -676,7 +686,7 @@ export default function ClinicBanner() {
                     <div className="date">05 Jan, 2020</div>
                     <h2>
                       <a href="blog-single.html">
-                        We provide highly business soliutions.
+                        Chúng tôi cung cấp giải pháp kinh doanh cao cấp.
                       </a>
                     </h2>
                     <p className="text">
@@ -735,7 +745,7 @@ export default function ClinicBanner() {
           <div className="row">
             <div className="col-lg-12">
               <div className="section-title">
-                <h2>We Are Always Ready to Help You. Book An Appointment</h2>
+                <h2>Chúng tôi luôn sẵn sàng giúp bạn. Đặt lịch hẹn</h2>
                 <img src="img/section-img.png" alt="#" />
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipiscing elit
@@ -750,7 +760,7 @@ export default function ClinicBanner() {
                 <div className="row">
                   <div className="col-lg-6 col-md-6 col-12">
                     <div className="form-group">
-                      <input name="name" type="text" placeholder="Name" />
+                      <input name="name" type="text" placeholder="Họ và tên" />
                     </div>
                   </div>
                   <div className="col-lg-6 col-md-6 col-12">
@@ -760,7 +770,11 @@ export default function ClinicBanner() {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12">
                     <div className="form-group">
-                      <input name="phone" type="text" placeholder="Phone" />
+                      <input
+                        name="phone"
+                        type="text"
+                        placeholder="Số điện thoại"
+                      />
                     </div>
                   </div>
                   <div className="col-lg-6 col-md-6 col-12">
@@ -769,22 +783,22 @@ export default function ClinicBanner() {
                         className="nice-select form-control wide"
                         tabIndex={0}
                       >
-                        <span className="current">Department</span>
+                        <span className="current">Khoa</span>
                         <ul className="list">
                           <li data-value="1" className="option selected ">
-                            Department
+                            Khoa
                           </li>
                           <li data-value="2" className="option">
-                            Cardiac Clinic
+                            Khoa tim mạch
                           </li>
                           <li data-value="3" className="option">
-                            Neurology
+                            Khoa não
                           </li>
                           <li data-value="4" className="option">
-                            Dentistry
+                            Khoa ngoại
                           </li>
                           <li data-value="5" className="option">
-                            Gastroenterology
+                            Khoa nội
                           </li>
                         </ul>
                       </div>
@@ -796,19 +810,19 @@ export default function ClinicBanner() {
                         className="nice-select form-control wide"
                         tabIndex={0}
                       >
-                        <span className="current">Doctor</span>
+                        <span className="current">Bác sĩ</span>
                         <ul className="list">
                           <li data-value="1" className="option selected ">
-                            Doctor
+                            Bác sĩ
                           </li>
                           <li data-value="2" className="option">
-                            Dr. Akther Hossain
+                            Bác sĩ A
                           </li>
                           <li data-value="3" className="option">
-                            Dr. Dery Alex
+                            Bác sĩ B
                           </li>
                           <li data-value="4" className="option">
-                            Dr. Jovis Karon
+                            Bác sĩ C
                           </li>
                         </ul>
                       </div>
@@ -816,14 +830,14 @@ export default function ClinicBanner() {
                   </div>
                   <div className="col-lg-6 col-md-6 col-12">
                     <div className="form-group">
-                      <input type="text" placeholder="Date" id="datepicker" />
+                      <input type="text" placeholder="Ngày" id="datepicker" />
                     </div>
                   </div>
                   <div className="col-lg-12 col-md-12 col-12">
                     <div className="form-group">
                       <textarea
                         name="message"
-                        placeholder="Write Your Message Here....."
+                        placeholder="Nội dung"
                       ></textarea>
                     </div>
                   </div>
@@ -833,13 +847,13 @@ export default function ClinicBanner() {
                     <div className="form-group">
                       <div className="button">
                         <button type="submit" className="btn">
-                          Book An Appointment
+                          Đặt lịch hẹn
                         </button>
                       </div>
                     </div>
                   </div>
                   <div className="col-lg-7 col-md-8 col-12">
-                    <p>( We will be confirm by an Text Message )</p>
+                    <p>( Chúng tôi sẽ xác nhận bằng tin nhắn văn bản )</p>
                   </div>
                 </div>
               </form>
@@ -858,7 +872,7 @@ export default function ClinicBanner() {
           <div className="row ">
             <div className="col-lg-6  col-12">
               <div className="subscribe-text ">
-                <h6>Sign up for newsletter</h6>
+                <h6>Đăng kí nhận bản tin</h6>
                 <p className="">
                   Cu qui soleat partiendo urbanitas. Eum aperiri indoctum eu,
                   <br /> homero alterum.
@@ -875,12 +889,12 @@ export default function ClinicBanner() {
                 >
                   <input
                     name="EMAIL"
-                    placeholder="Your email address"
+                    placeholder="Địa chỉ email của bạn"
                     className="common-input"
                     required={true}
                     type="email"
                   />
-                  <button className="btn">Subscribe</button>
+                  <button className="btn">Đăng kí</button>
                 </form>
               </div>
             </div>

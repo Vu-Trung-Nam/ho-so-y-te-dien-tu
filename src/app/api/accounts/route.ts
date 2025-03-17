@@ -36,9 +36,11 @@ export async function POST(request: Request) {
       gender,
       dob,
       role,
+      citizenId,
+      healthInsuranceId,
     } = body;
 
-
+    // Create account with related data based on role
 
     // Create account with related data based on role
     // bệnh nhân đăng kí
@@ -55,6 +57,8 @@ export async function POST(request: Request) {
             gender,
             phone,
             address,
+            citizenId,
+            healthInsuranceId,
           },
         },
       },

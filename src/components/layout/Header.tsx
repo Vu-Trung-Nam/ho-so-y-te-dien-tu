@@ -19,16 +19,16 @@ const Header = () => {
             <nav className="navigation">
               <ul className="nav menu">
                 <li className={pathname === "/" ? "active" : ""}>
-                  <Link href="/">Home</Link>
+                  <Link href="/">Trang chủ</Link>
                 </li>
                 <li className={pathname === "/list_doctor" ? "active" : ""}>
-                  <Link href="/list_doctor">Doctos</Link>
+                  <Link href="/list_doctor">Bác sĩ</Link>
                 </li>
                 <li className={pathname === "/services" ? "active" : ""}>
-                  <Link href="/services">Services</Link>
+                  <Link href="/services">Dịch vụ</Link>
                 </li>
                 <li className={pathname === "/contact" ? "active" : ""}>
-                  <Link href="/contact">Contact Us</Link>
+                  <Link href="/contact">Liên hệ</Link>
                 </li>
               </ul>
             </nav>
@@ -38,7 +38,7 @@ const Header = () => {
         <div className="col-lg-2 col-12">
           <div className="get-quote">
             <Link href="/user" className="btn">
-              Book Appointment
+              Đặt lịch khám
             </Link>
           </div>
         </div>
@@ -62,7 +62,7 @@ const Header = () => {
                 <Link href="/list_doctor">Danh sách bác sĩ</Link>
               </li>
               <li className={pathname === "/contact" ? "active" : ""}>
-                <Link href="/contact">Contact Us</Link>
+                <Link href="/contact">Liên hệ</Link>
               </li>
             </ul>
           </nav>
@@ -151,7 +151,7 @@ const Header = () => {
           <div className="row">
             <div className="col-lg-4 col-md-5 col-12">
               {/* Contact */}
-              <ul className="top-link">
+              {/* <ul className="top-link">
                 <li>
                   <a href="">About</a>
                 </li>
@@ -164,7 +164,7 @@ const Header = () => {
                 <li>
                   <a href="">FAQ</a>
                 </li>
-              </ul>
+              </ul> */}
               {/* End Contact */}
             </div>
             <div className="col-lg-8 col-md-6 col-12">
