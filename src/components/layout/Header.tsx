@@ -73,25 +73,25 @@ const Header = () => {
   };
   const adminMenu = () => {
     return (
-      <div className="col-lg-7 col-md-9 col-12">
+      <div className="col-lg-9 col-md-9 col-12">
         {/* Main Menu */}
         <div className="main-menu">
           <nav className="navigation">
             <ul className="nav menu">
-              <li className={pathname === "/" ? "active" : ""}>
-                <Link href="/">QL Bác sĩ</Link>
+              <li className={pathname === "/admin/doctor" ? "active" : ""}>
+                <Link href="/admin/doctor">QL Bác sĩ</Link>
               </li>
-              <li className={pathname === "/" ? "active" : ""}>
-                <Link href="/">QL Nhân viên</Link>
+              <li className={pathname === "/admin/staff" ? "active" : ""}>
+                <Link href="/admin/staff">QL Nhân viên</Link>
               </li>
-              <li className={pathname === "/" ? "active" : ""}>
-                <Link href="/">QL Bệnh nhân</Link>
+              <li className={pathname === "/admin/patient" ? "active" : ""}>
+                <Link href="/admin/patient">QL Bệnh nhân</Link>
               </li>
-              <li className={pathname === "/" ? "active" : ""}>
-                <Link href="/">QL Hóa đơn</Link>
+              <li className={pathname === "/admin/bill" ? "active" : ""}>
+                <Link href="/admin/bill">QL Hóa đơn</Link>
               </li>
-              <li className={pathname === "/" ? "active" : ""}>
-                <Link href="/">QL Doanh số</Link>
+              <li className={pathname === "/admin/medicine" ? "active" : ""}>
+                <Link href="/admin/medicine">QL Thuốc </Link>
               </li>
             </ul>
           </nav>
@@ -110,8 +110,8 @@ const Header = () => {
               <li className={pathname === "/staff" ? "active" : ""}>
                 <Link href="/staff">QL lịch khám</Link>
               </li>
-              <li className={pathname === "/staff/invoice" ? "active" : ""}>
-                <Link href="/staff/invoice">QL Hóa đơn</Link>
+              <li className={pathname === "/staff/bill" ? "active" : ""}>
+                <Link href="/staff/bill">QL Hóa đơn</Link>
               </li>
             </ul>
           </nav>
@@ -149,24 +149,7 @@ const Header = () => {
       <div className="topbar">
         <div className="container">
           <div className="row">
-            <div className="col-lg-4 col-md-5 col-12">
-              {/* Contact */}
-              {/* <ul className="top-link">
-                <li>
-                  <a href="">About</a>
-                </li>
-                <li>
-                  <a href="">Doctors</a>
-                </li>
-                <li>
-                  <a href="">Contact</a>
-                </li>
-                <li>
-                  <a href="">FAQ</a>
-                </li>
-              </ul> */}
-              {/* End Contact */}
-            </div>
+            <div className="col-lg-4 col-md-5 col-12"></div>
             <div className="col-lg-8 col-md-6 col-12">
               {/* Top Contact */}
               <ul className="top-contact">

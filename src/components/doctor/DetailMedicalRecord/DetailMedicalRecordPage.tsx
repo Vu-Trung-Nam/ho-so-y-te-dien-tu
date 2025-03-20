@@ -5,11 +5,13 @@ import CreateTestResultModal from "./CreateTestResultModal";
 import Loading from "@/components/Icons/Loading";
 import { formatDateTime } from "@/lib/dateTime";
 import CreatePrescriptionModal from "./CreatePrescriptionModal";
+import useAuthStore from "@/store/store";
 
 interface Props {
   medicalRecordID: string;
 }
 const DetailMedicalRecordPage = ({ medicalRecordID }: Props) => {
+  const { role } = useAuthStore();
   const { data, isPending } = useGetMedicalRecordById(Number(medicalRecordID));
   const [modal, setModal] = useState({
     CreateTestResultModal: false,
@@ -27,20 +29,22 @@ const DetailMedicalRecordPage = ({ medicalRecordID }: Props) => {
         <h1 className="text-center">
           Sổ khám bệnh của bệnh nhân: {data?.patient.fullName}
         </h1>
-        <div className="flex justify-center gap-5">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            onClick={() => _handleOpenModal("CreateTestResultModal")}
-          >
-            Tạo phiếu xét nghiệm
-          </button>
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            onClick={() => _handleOpenModal("CreatePrescriptionModal")}
-          >
-            Tạo đơn thuốc
-          </button>
-        </div>
+        {role == "DOCTOR" && (
+          <div className="flex justify-center gap-5">
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              onClick={() => _handleOpenModal("CreateTestResultModal")}
+            >
+              Tạo phiếu xét nghiệm
+            </button>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              onClick={() => _handleOpenModal("CreatePrescriptionModal")}
+            >
+              Tạo đơn thuốc
+            </button>
+          </div>
+        )}
 
         {!isPending ? (
           <div className="grid grid-cols-2 gap-5 justify-center justify-items-center items-start">

@@ -24,11 +24,16 @@ export const useCreateMedicalRecord = () => {
   });
 };
 
-export const useGetMedicalRecords = () => {
+export const useGetMedicalRecords = (params: { patientId?: number }) => {
   return useQuery({
-    queryKey: ["medicalRecords"],
+    queryKey: ["medicalRecords", params.patientId],
     queryFn: async () => {
-      const { data } = await axios.get<MedicalRecord[]>("/api/medical-records");
+      const { data } = await axios.get<MedicalRecord[]>(
+        "/api/medical-records",
+        {
+          params,
+        }
+      );
       return data;
     },
   });

@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Doctor } from "@/types/type";
 
-// Get all doctors
+import { ICreateDoctor } from "@/app/api/doctors/route";
+import { Doctor } from "@prisma/client";
+
 export const useGetDoctors = (params?: {
   fullName?: string;
   specialization?: string;
@@ -25,19 +26,10 @@ export const useGetDoctors = (params?: {
   });
 };
 
-// Create new doctor
-export interface DoctorParams {
-  id?: number;
-  accountId: number;
-  specialization: string;
-  department: string;
-  position: string;
-}
-
 export const useCreateDoctor = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (doctor: DoctorParams) => {
+    mutationFn: async (doctor: ICreateDoctor) => {
       const { data } = await axios.post("/api/doctors", doctor);
       return data;
     },
@@ -56,23 +48,9 @@ export const useUpdateDoctor = () => {
       doctor,
     }: {
       id: number;
-      doctor: Partial<Doctor>;
+      doctor: ICreateDoctor;
     }) => {
-      const { data } = await axios.put(`/api/doctors?id=${id}`, doctor);
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["doctors"] });
-    },
-  });
-};
-
-// Delete doctor
-export const useDeleteDoctor = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (id: number) => {
-      const { data } = await axios.delete(`/api/doctors?id=${id}`);
+      const { data } = await axios.put(`/api/doctors/${id}`, doctor);
       return data;
     },
     onSuccess: () => {

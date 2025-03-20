@@ -111,6 +111,10 @@ export interface Bill {
   patient: Patient;
   testResults?: TestResult[];
   prescriptions?: Prescription[];
+  medicalRecordId: number;
+  medicalRecord: MedicalRecord;
+  doctorId: number;
+  doctor: Doctor;
 }
 
 interface TestResult {

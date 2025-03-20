@@ -1,20 +1,26 @@
 "use client";
-import { useGetMedicalRecords } from "@/tanstackquery/medicalRecord";
-import React from "react";
-import Loading from "../Icons/Loading";
+import Loading from "@/components/Icons/Loading";
 import { formatDateTime } from "@/lib/dateTime";
-import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-const MedicalRecordTable = () => {
-  const { data: medicalRecords, isPending } = useGetMedicalRecords({});
-  const router = useRouter();
-  const pathname = usePathname();
-  console.log(medicalRecords);
+import useAuthStore from "@/store/store";
+import { useGetMedicalRecords } from "@/tanstackquery/medicalRecord";
+import Link from "antd/es/typography/Link";
+import React from "react";
+
+const statusMedicalRecord = {
+  PENDING: "Chưa hoàn thành",
+  PAID: "Đã hoàn thành",
+  CANCELLED: "Đã hoàn thành",
+};
+const UserMedicalRecordTable = () => {
+  const { profile } = useAuthStore();
+  const { data: medicalRecords, isPending } = useGetMedicalRecords({
+    patientId: profile?.id,
+  });
   return (
-    <div>
-      <h2 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-5 font-bold">
+    <div className="container">
+      <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-5 font-bold">
         Danh sách sổ khám bệnh
-      </h2>
+      </h1>
       {isPending && <Loading />}
       {!isPending && (
         <div className="relative overflow-x-auto px-10 rounded-lg">
@@ -50,6 +56,7 @@ const MedicalRecordTable = () => {
                 </th>
               </tr>
             </thead>
+
             <tbody>
               {medicalRecords &&
                 medicalRecords.map((medicalRecord, idx) => {
@@ -79,19 +86,20 @@ const MedicalRecordTable = () => {
                         {formatDateTime(medicalRecord.createdAt)}
                       </td>
                       <td className="px-6 py-4">
-                        {medicalRecord.bill.status == "PENDING"
-                          ? "Chưa thanh toán"
-                          : medicalRecord.bill.status}
+                        {
+                          statusMedicalRecord[
+                            medicalRecord.bill
+                              .status as keyof typeof statusMedicalRecord
+                          ]
+                        }
                       </td>
                       <td className="px-6 py-4">
-                        <button
-                          onClick={() =>
-                            router.push(`${pathname}/${medicalRecord.id}`)
-                          }
-                          className="p-2 rounded-sm inline-block"
+                        <Link
+                          href={`/user/medical-records/${medicalRecord.id}`}
+                          className="btn p-2 bg-primary text-white"
                         >
-                          Cập nhật sổ khám bệnh
-                        </button>
+                          Xem chi tiết
+                        </Link>
                       </td>
                     </tr>
                   );
@@ -104,4 +112,4 @@ const MedicalRecordTable = () => {
   );
 };
 
-export default MedicalRecordTable;
+export default UserMedicalRecordTable;

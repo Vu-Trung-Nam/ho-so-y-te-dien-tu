@@ -4,9 +4,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 // GET /api/medical-records - Get all medical records
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const patientId = searchParams.get("patientId");
     const medicalRecords = await prisma.medicalRecord.findMany({
+      where: {
+        patientId: patientId ? Number(patientId) : undefined,
+      },
       include: {
         patient: true,
         doctor: true,

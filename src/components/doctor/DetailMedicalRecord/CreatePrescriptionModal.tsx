@@ -248,6 +248,10 @@ const CreatePrescriptionModal = ({
                           const unit = dataMedicines?.find(
                             (medicine) => medicine.name === e.target.value
                           )?.unit;
+                          const price = dataMedicines?.find(
+                            (medicine) => medicine.name === e.target.value
+                          )?.price;
+                          const totalCost = price! * medicine.quantity;
                           setListMedicine(
                             listMedicine.map((medicine, i) =>
                               i === index
@@ -256,6 +260,8 @@ const CreatePrescriptionModal = ({
                                     name: e.target.value,
                                     medicineId: medicineID as number,
                                     unit: unit as Unit,
+                                    price: price as number,
+                                    totalCost: totalCost,
                                   }
                                 : medicine
                             )
@@ -298,38 +304,7 @@ const CreatePrescriptionModal = ({
                     </div>
                     <div className="flex flex-col">
                       <label>Đơn giá</label>
-                      <input
-                        type="text"
-                        value={medicine.price}
-                        onChange={(e) => {
-                          // if price is not a number, toast warning and set value to 0
-                          // set total cost = price * quantity
-                          if (isNaN(Number(e.target.value))) {
-                            toast.warning("Giá không hợp lệ!");
-                            setListMedicine(
-                              listMedicine.map((medicine, i) =>
-                                i === index
-                                  ? { ...medicine, price: 0 }
-                                  : medicine
-                              )
-                            );
-                            return;
-                          }
-                          setListMedicine(
-                            listMedicine.map((medicine, i) =>
-                              i === index
-                                ? {
-                                    ...medicine,
-                                    price: Number(e.target.value),
-                                    totalCost:
-                                      Number(e.target.value) *
-                                      medicine.quantity,
-                                  }
-                                : medicine
-                            )
-                          );
-                        }}
-                      />
+                      <input disabled type="text" value={medicine.price} />
                     </div>
                     <div className="flex flex-col">
                       <label>Tổng tiền</label>

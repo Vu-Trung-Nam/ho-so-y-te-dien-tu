@@ -68,27 +68,28 @@ model Patient {
 // bac si
 
 enum Department {
-  KHOA_NOI_TOAN_QUAT
+  KHOA_NOI_TONG_QUAT
   KHOA_NGOAI
   KHOA_NHI
   KHOA_HOI_SUC_CAP_CUU
 }
 
 model Doctor {
-  id                Int             @id @default(autoincrement())
-  accountId         Int?            @unique
-  userId            String          @unique
-  fullName          String?
-  specialization    String?
-  phone             String?
-  department        Department
-  healthInsuranceId String?
-  account           Account?        @relation(fields: [accountId], references: [id])
-  appointments      Appointment[]
-  prescriptions     Prescription[]
-  bills             Bill[]
-  medicalRecords    MedicalRecord[]
-  TestResult        TestResult[]
+  id             Int     @id @default(autoincrement())
+  accountId      Int?    @unique
+  userId         String  @unique
+  fullName       String?
+  specialization String?
+  phone          String?
+  avatar         String?
+
+  department     Department
+  account        Account?        @relation(fields: [accountId], references: [id])
+  appointments   Appointment[]
+  prescriptions  Prescription[]
+  bills          Bill[]
+  medicalRecords MedicalRecord[]
+  TestResult     TestResult[]
 }
 
 // lich kham

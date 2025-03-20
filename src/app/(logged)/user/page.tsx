@@ -2,6 +2,7 @@
 import AppointmentTable from "@/components/user/home/AppointmentTable";
 import CreateAppointmentModal from "@/components/user/home/CreateAppointmentModal";
 import { Appointment } from "@/types/type";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Page = () => {
@@ -35,15 +36,12 @@ const Page = () => {
               Đăng kí lịch khám chữa bệnh
             </span>
           </button>
-          <button className="btn">
-            <span className="text-sm font-medium">Xem hồ sơ bệnh án</span>
-          </button>
-          <button className="btn">
-            <span className="text-sm font-medium">Xem hóa đơn</span>
-          </button>
-          <button className="btn">
-            <span className="text-sm font-medium">Xem đơn thuốc</span>
-          </button>
+          <Link className="btn text-white" href="/user/medical-records">
+            Xem hồ sơ bệnh án (sổ khám bệnh)
+          </Link>
+          <Link className="btn text-white" href="/user/bills">
+            Xem hóa đơn
+          </Link>
         </div>
         <AppointmentTable />
       </div>

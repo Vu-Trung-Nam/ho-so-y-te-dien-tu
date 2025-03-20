@@ -35,6 +35,8 @@ export async function POST(request: Request) {
         gender: body.gender,
         phone: body.phone,
         address: body.address,
+        citizenId:body.citizenId
+        
       },
       include: {
         account: true,

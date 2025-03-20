@@ -10,6 +10,7 @@ import { Modal, Form, DatePicker, Select } from "antd";
 import { useForm } from "react-hook-form";
 import useAuthStore from "@/store/store";
 import { useGetDoctors } from "@/tanstackquery/doctor";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Props = {
   selectedAppointment: Appointment | null;
@@ -26,7 +27,13 @@ const CreateAppointmentModal = ({
   const [loading, setLoading] = useState(false);
   const updateAppointment = useUpdateAppointment();
   const addAppointment = useCreateAppointment();
-  const { data: doctors } = useGetDoctors();
+  const [selectedDepartment, setSelectedDepartment] = useState<
+    string | undefined
+  >(undefined);
+  const [isDoctor, setIsDoctor] = useState(false);
+  const { data: doctors } = useGetDoctors({
+    department: isDoctor ? selectedDepartment : undefined,
+  });
   const {
     control,
     handleSubmit,
@@ -44,6 +51,7 @@ const CreateAppointmentModal = ({
   });
 
   const onSubmit = async (data: AppointmentParams) => {
+    if (isDoctor && !data.doctorId) return toast.error("Vui lòng chọn bác sĩ");
     setLoading(true);
     try {
       if (selectedAppointment) {
@@ -53,6 +61,7 @@ const CreateAppointmentModal = ({
             appointment: {
               ...data,
               patientId: selectedAppointment?.patientId,
+              doctorId: isDoctor ? data.doctorId : undefined,
             },
           },
           {
@@ -136,21 +145,45 @@ const CreateAppointmentModal = ({
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
+          <div className="flex items-center space-x-2 gap-1">
+            <input
+              type="checkbox"
+              onChange={() => setIsDoctor(!isDoctor)}
+              checked={isDoctor}
+            />
+            <label className="block text-sm font-medium m-0 text-gray-700">
+              Chọn bác sĩ khám
+            </label>
+          </div>
+          <div className="form-group">
+            <label className="block text-sm font-medium mb-2 text-gray-700">
+              Khoa
+            </label>
+            <select
+              disabled={!isDoctor}
+              onChange={(e) => setSelectedDepartment(e.target.value)}
+              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+            >
+              <option value={undefined}>Chọn khoa</option>
+              <option value="KHOA_NOI_TONG_QUAT">Khoa nội tổng quát</option>
+              <option value="KHOA_NGOAI">Khoa ngoại</option>
+              <option value="KHOA_NHI">Khoa nhi</option>
+              {/* Add doctor options here */}
+            </select>
+          </div>
           <div className="form-group">
             <label className="block text-sm font-medium mb-2 text-gray-700">
               Bác sĩ
             </label>
             <select
+              disabled={!isDoctor}
               {...register("doctorId")}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             >
-              <option value={undefined}>
-                Chọn bác sĩ muốn khám (để trống nếu không có yêu cầu)
-              </option>
+              <option value={""}>Chọn bác sĩ muốn khám</option>
               {doctors?.map((doctor) => (
                 <option key={doctor.id} value={doctor.id}>
-                  {doctor.fullName} - {doctor.specialization} -{" "}
-                  {doctor.department}
+                  {doctor.fullName} - {doctor.department}
                 </option>
               ))}
               {/* Add doctor options here */}
