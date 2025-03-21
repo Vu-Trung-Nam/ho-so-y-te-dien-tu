@@ -152,7 +152,7 @@ const CreateAppointmentModal = ({
               checked={isDoctor}
             />
             <label className="block text-sm font-medium m-0 text-gray-700">
-              Chọn bác sĩ khám
+              Chọn bác sĩ khám (nếu bỏ trống nhân viên sẽ chọn)
             </label>
           </div>
           <div className="form-group">

@@ -37,9 +37,9 @@ const Header = () => {
         </div>
         <div className="col-lg-2 col-12">
           <div className="get-quote">
-            <Link href="/user" className="btn">
+            {/* <Link href="/user" className="btn">
               Đặt lịch khám
-            </Link>
+            </Link> */}
           </div>
         </div>
       </>
@@ -78,6 +78,9 @@ const Header = () => {
         <div className="main-menu">
           <nav className="navigation">
             <ul className="nav menu">
+              <li className={pathname === "/admin" ? "active" : ""}>
+                <Link href="/admin">QL Doanh thu</Link>
+              </li>
               <li className={pathname === "/admin/doctor" ? "active" : ""}>
                 <Link href="/admin/doctor">QL Bác sĩ</Link>
               </li>
