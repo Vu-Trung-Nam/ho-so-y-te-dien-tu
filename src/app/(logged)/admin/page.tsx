@@ -1,6 +1,6 @@
 "use client";
 import Loading from "@/components/Icons/Loading";
-import { formatDateTime } from "@/lib/dateTime";
+import { formatDateTime, formatDateTimeBill } from "@/lib/dateTime";
 import { useGetBills } from "@/tanstackquery/bill";
 import React, { useEffect, useState } from "react";
 
@@ -224,7 +224,7 @@ const Page = () => {
                           {index + 1}
                         </th>
                         <td className="px-6 py-3">
-                          {formatDateTime(bill?.date)}
+                          {formatDateTimeBill(bill?.date)}
                         </td>
                         <td className="px-6 py-3">{bill.totalRevenue}</td>
                         <td className="px-6 py-3">{bill.totalPatients}</td>

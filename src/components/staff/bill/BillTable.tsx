@@ -148,7 +148,7 @@ const BillTable = () => {
                       {new Date(bill?.createdAt).toLocaleDateString()}
                     </td>
                     <td className="p-3 border space-y-2">
-                      {bill?.status == "PENDING" && (
+                      {bill?.status == "PENDING" && role == "STAFF" && (
                         <>
                           <Popover>
                             <PopoverTrigger className="btn">
