@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     const phone = searchParams.get("phone");
     const doctors = await prisma.doctor.findMany({
       where: {
-        department: (department as Department) ?? undefined,
+        department: (department as Department) || undefined,
       },
       include: {
         account: true,

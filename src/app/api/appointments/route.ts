@@ -41,13 +41,13 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body: Appointment = await request.json();
-
+console.log('body:',body)
     const appointment = await prisma.appointment.create({
       data: {
         appointmentDate: new Date(body?.appointmentDate),
         status: body?.status,
         patientId: Number(body?.patientId),
-        doctorId: Number(body?.doctorId) ?? undefined,
+        doctorId: Number(body?.doctorId) || undefined,
         symptoms: body.symptoms,
       },
       include: {
@@ -98,7 +98,7 @@ export async function PUT(request: Request) {
         appointmentDate: new Date(body?.appointmentDate),
         status: body?.status,
         patientId: Number(body?.patientId),
-        doctorId: Number(body?.doctorId) ?? undefined,
+        doctorId: Number(body?.doctorId) || undefined,
         symptoms: body.symptoms,
       },
       include: {

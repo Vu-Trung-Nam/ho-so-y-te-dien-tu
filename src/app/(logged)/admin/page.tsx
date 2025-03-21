@@ -121,7 +121,7 @@ const Page = () => {
       }
     >;
 
-    const summaryByDay = invoices.reduce<SummaryByDay>((acc, invoice) => {
+    const summaryByDay = data.reduce<SummaryByDay>((acc, invoice) => {
       const date = String(invoice.paidAt).split("T")[0]; // Lấy ngày (YYYY-MM-DD)
 
       if (!acc[date]) {
@@ -152,7 +152,6 @@ const Page = () => {
 
     setListBill(result);
   }, [data]);
-  console.log("listBill:", listBill);
   return (
     <div className="space-y-5 min-h-screen">
       <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-4 font-bold">

@@ -81,17 +81,21 @@ const MedicalRecordTable = () => {
                       <td className="px-6 py-4">
                         {medicalRecord.bill.status == "PENDING"
                           ? "Chưa thanh toán"
-                          : medicalRecord.bill.status}
+                          : medicalRecord.bill.status == "PAID"
+                          ? "Đã thanh toán"
+                          : "Đã hủy"}
                       </td>
                       <td className="px-6 py-4">
-                        <button
-                          onClick={() =>
-                            router.push(`${pathname}/${medicalRecord.id}`)
-                          }
-                          className="p-2 rounded-sm inline-block"
-                        >
-                          Cập nhật sổ khám bệnh
-                        </button>
+                        {medicalRecord.bill.status == "PENDING" && (
+                          <button
+                            onClick={() =>
+                              router.push(`${pathname}/${medicalRecord.id}`)
+                            }
+                            className="p-2 rounded-sm inline-block"
+                          >
+                            Cập nhật sổ khám bệnh
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );
