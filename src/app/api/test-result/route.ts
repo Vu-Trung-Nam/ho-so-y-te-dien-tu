@@ -1,7 +1,5 @@
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
 
 // GET /api/medical-records - Get all medical records
 export async function GET() {

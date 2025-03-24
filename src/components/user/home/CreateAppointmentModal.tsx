@@ -98,6 +98,7 @@ const CreateAppointmentModal = ({
   return (
     <>
       <Modal
+        centered
         title={selectedAppointment ? "Sửa lịch khám" : "Đặt lịch khám"}
         open={isModalOpen}
         onCancel={handleCloseModal}

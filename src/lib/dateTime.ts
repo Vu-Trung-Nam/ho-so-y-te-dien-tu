@@ -9,3 +9,7 @@ export const formatDob = (date: Date): string => {
 export const formatDateTimeBill = (date: Date): string => {
   return dayjs(date).format("DD/MM/YYYY");
 };
+
+export const formatDateInput = (date: Date): string => {
+  return dayjs(date).format("YYYY-MM-DD");
+};

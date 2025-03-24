@@ -1,12 +1,14 @@
 "use client";
 import { useGetDoctors } from "@/tanstackquery/doctor";
-import { Department, Doctor } from "@prisma/client";
+import { Department } from "@prisma/client";
 import React, { useState } from "react";
 import Loading from "../Icons/Loading";
 import useAuthStore from "@/store/store";
 import CreateDoctorModal from "./modal/createDoctorModal";
 import { ICreateDoctor } from "@/app/api/doctors/route";
 import Image from "next/image";
+import { ICreateAccount } from "@/tanstackquery/account";
+import { Doctor } from "@/types/type";
 const departmentName = {
   KHOA_NOI_TONG_QUAT: "Khoa nội tổng quát",
   KHOA_NGOAI: "Khoa ngoại",
@@ -28,9 +30,7 @@ const DoctorListTable = () => {
     ""
   );
   const [modal, setModal] = useState({ CreateDoctorModal: false });
-  const [selectedDoctor, setSelectedDoctor] = useState<ICreateDoctor | null>(
-    null
-  );
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const _handleOpenModal = (modalName: keyof typeof modal) => {
     setModal((prev) => ({ ...prev, [modalName]: true }));
   };
@@ -41,7 +41,7 @@ const DoctorListTable = () => {
   const { data: doctors, isPending } = useGetDoctors({
     department: selectedDepartment || undefined,
   });
-  console.log("doctors:", doctors);
+
   return (
     <div className="px-10 rounded-lg">
       <div className="form-group">
@@ -63,7 +63,10 @@ const DoctorListTable = () => {
         <div>
           <button
             className="btn"
-            onClick={() => _handleOpenModal("CreateDoctorModal")}
+            onClick={() => {
+              setSelectedDoctor(null);
+              _handleOpenModal("CreateDoctorModal");
+            }}
           >
             Thêm bác sĩ
           </button>
@@ -86,6 +89,12 @@ const DoctorListTable = () => {
                 </th>
                 <th scope="col" className="px-6 py-3">
                   KHOA
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  TÀI KHOẢN
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  MẬT KHẨU
                 </th>
                 <th scope="col" className="px-6 py-3">
                   TÙY CHỌN
@@ -124,10 +133,20 @@ const DoctorListTable = () => {
                           ]
                         }
                       </td>
+                      <td className="px-6 py-4">{doctor?.account?.username}</td>
+                      <td className="px-6 py-4">{doctor?.account?.password}</td>
                       <td>
                         {role == "ADMIN" && (
                           <>
-                            <button className="btn">Sửa</button>
+                            <button
+                              className="btn"
+                              onClick={() => {
+                                setSelectedDoctor(doctor);
+                                _handleOpenModal("CreateDoctorModal");
+                              }}
+                            >
+                              Sửa
+                            </button>
                           </>
                         )}
                       </td>

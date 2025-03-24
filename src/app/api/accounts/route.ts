@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 
 // GET /api/accounts - Get all accounts
 export async function GET() {
@@ -26,19 +24,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      username,
-      password,
-      email,
-      fullName,
-      phone,
-      address,
-      gender,
-      dob,
-      role,
-      citizenId,
-      healthInsuranceId,
-    } = body;
+    const { username, password, email, role } = body;
 
     // Create account with related data based on role
 
@@ -50,17 +36,6 @@ export async function POST(request: Request) {
         password,
         email,
         role,
-        patient: {
-          create: {
-            fullName,
-            dob,
-            gender,
-            phone,
-            address,
-            citizenId,
-            healthInsuranceId,
-          },
-        },
       },
       include: {
         patient: true,

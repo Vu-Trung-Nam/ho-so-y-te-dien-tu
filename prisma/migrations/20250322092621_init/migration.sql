@@ -24,6 +24,7 @@ CREATE TABLE "Account" (
     "email" TEXT,
     "role" "Role" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
 );
@@ -31,13 +32,14 @@ CREATE TABLE "Account" (
 -- CreateTable
 CREATE TABLE "Staff" (
     "id" SERIAL NOT NULL,
-    "accountId" INTEGER,
+    "accountId" INTEGER NOT NULL,
     "dob" TIMESTAMP(3),
     "gender" TEXT,
     "fullName" TEXT,
     "position" TEXT,
     "phone" TEXT,
     "department" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Staff_pkey" PRIMARY KEY ("id")
 );
@@ -45,7 +47,7 @@ CREATE TABLE "Staff" (
 -- CreateTable
 CREATE TABLE "Patient" (
     "id" SERIAL NOT NULL,
-    "accountId" INTEGER,
+    "accountId" INTEGER NOT NULL,
     "fullName" TEXT NOT NULL,
     "dob" TIMESTAMP(3),
     "gender" TEXT,
@@ -53,6 +55,7 @@ CREATE TABLE "Patient" (
     "address" TEXT,
     "citizenId" TEXT NOT NULL,
     "healthInsuranceId" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Patient_pkey" PRIMARY KEY ("id")
 );
@@ -60,13 +63,14 @@ CREATE TABLE "Patient" (
 -- CreateTable
 CREATE TABLE "Doctor" (
     "id" SERIAL NOT NULL,
-    "accountId" INTEGER,
+    "accountId" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "fullName" TEXT,
     "specialization" TEXT,
     "phone" TEXT,
+    "avatar" TEXT,
     "department" "Department" NOT NULL,
-    "healthInsuranceId" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Doctor_pkey" PRIMARY KEY ("id")
 );
@@ -79,6 +83,7 @@ CREATE TABLE "Appointment" (
     "appointmentDate" TIMESTAMP(3) NOT NULL,
     "status" "AppointmentStatus" NOT NULL DEFAULT 'NOTCOMFIRM',
     "symptoms" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Appointment_pkey" PRIMARY KEY ("id")
 );
@@ -92,6 +97,7 @@ CREATE TABLE "Prescription" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "billId" INTEGER,
     "totalCost" DECIMAL(65,30),
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Prescription_pkey" PRIMARY KEY ("id")
 );
@@ -117,6 +123,8 @@ CREATE TABLE "Medicine" (
     "price" INTEGER NOT NULL,
     "stock" INTEGER NOT NULL,
     "note" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "importedPharmacy" TEXT NOT NULL,
 
     CONSTRAINT "Medicine_pkey" PRIMARY KEY ("id")
 );
@@ -134,6 +142,7 @@ CREATE TABLE "TestResult" (
     "interpretation" TEXT,
     "note" TEXT,
     "totalCost" DECIMAL(65,30),
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "TestResult_pkey" PRIMARY KEY ("id")
 );
@@ -148,6 +157,7 @@ CREATE TABLE "Bill" (
     "status" "BillStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "paidAt" TIMESTAMP(3),
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Bill_pkey" PRIMARY KEY ("id")
 );
@@ -162,6 +172,7 @@ CREATE TABLE "MedicalRecord" (
     "diagnosis" TEXT,
     "symptoms" TEXT,
     "note" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "MedicalRecord_pkey" PRIMARY KEY ("id")
 );
@@ -200,13 +211,13 @@ CREATE UNIQUE INDEX "Bill_medicalRecordId_key" ON "Bill"("medicalRecordId");
 CREATE UNIQUE INDEX "MedicalRecord_appointmentId_key" ON "MedicalRecord"("appointmentId");
 
 -- AddForeignKey
-ALTER TABLE "Staff" ADD CONSTRAINT "Staff_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Staff" ADD CONSTRAINT "Staff_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Patient" ADD CONSTRAINT "Patient_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Patient" ADD CONSTRAINT "Patient_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Doctor" ADD CONSTRAINT "Doctor_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Doctor" ADD CONSTRAINT "Doctor_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,12 +1,11 @@
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
+import { z } from "zod";
 // GET /api/staff - Get all staff members
 export async function GET() {
   try {
     const staff = await prisma.staff.findMany({
+      orderBy: { id: "asc" },
       include: {
         account: true,
       },
@@ -20,77 +19,38 @@ export async function GET() {
   }
 }
 
+export const staffSchema = z.object({
+  accountId: z.number().min(1, "Account ID is required"),
+  dob: z
+    .string()
+    .refine((date) => !isNaN(Date.parse(date)), {
+      message: "Invalid date format",
+    })
+    .transform((date) => new Date(date)),
+  gender: z.string().min(1, "Gender is required"),
+  fullName: z.string().min(1, "Full Name is required"),
+  position: z.string().min(1, "Position is required"),
+  phone: z.string().min(1, "Phone is required"),
+  department: z.string().min(1, "Department is required"),
+});
 // POST /api/staff - Create many staff
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const staff = await prisma.staff.createMany({
-      data: body,
-      skipDuplicates: true,
+    const parsedBody = staffSchema.safeParse(body);
+    if (!parsedBody.success) {
+      return NextResponse.json(
+        { error: "Invalid input", details: parsedBody.error.format() },
+        { status: 400 }
+      );
+    }
+    const staff = await prisma.staff.create({
+      data: parsedBody.data, // Đã được xác thực
     });
     return NextResponse.json(staff);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to create staff" },
-      { status: 500 }
-    );
-  }
-}
-
-// PUT /api/staff/[id] - Update staff member
-export async function PUT(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-    if (!id) {
-      return NextResponse.json(
-        { error: "Staff ID is required" },
-        { status: 400 }
-      );
-    }
-
-    const body = await request.json();
-    const staff = await prisma.staff.update({
-      where: { id: Number(id) },
-      data: {
-        fullName: body.fullName,
-        position: body.position,
-        phone: body.phone,
-        department: body.department,
-      },
-      include: {
-        account: true,
-      },
-    });
-    return NextResponse.json(staff);
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to update staff member" },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE /api/staff/[id] - Delete staff member
-export async function DELETE(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-    if (!id) {
-      return NextResponse.json(
-        { error: "Staff ID is required" },
-        { status: 400 }
-      );
-    }
-
-    await prisma.staff.delete({
-      where: { id: Number(id) },
-    });
-
-    return NextResponse.json({ message: "Staff member deleted successfully" });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to delete staff member" },
       { status: 500 }
     );
   }

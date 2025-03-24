@@ -18,7 +18,6 @@ type Props = {
   handleCloseModal: () => void;
 };
 
-
 const ConfirmAppointmentModal = ({
   selectedAppointment,
   handleCloseModal,
@@ -99,6 +98,7 @@ const ConfirmAppointmentModal = ({
   return (
     <>
       <Modal
+        centered
         title={selectedAppointment ? "Xác nhận lịch khám" : "Đặt lịch khám"}
         open={isModalOpen}
         onCancel={handleCloseModal}

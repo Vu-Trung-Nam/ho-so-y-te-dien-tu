@@ -1,3 +1,5 @@
+import { Unit } from "@prisma/client";
+
 export interface Account {
   id?: number;
   username: string;
@@ -12,14 +14,15 @@ export interface Account {
 
 export interface Staff {
   id?: number;
-  accountId?: number;
-  dob?: Date;
-  gender?: string;
-  fullName?: string;
-  position?: string;
-  phone?: string;
-  department?: string;
+  accountId: number | null;
+  dob: Date | null;
+  gender: string | null;
+  fullName: string | null;
+  position: string | null;
+  phone: string | null;
+  department: string | null;
   account?: Account;
+  isDeleted: boolean;
 }
 
 export interface Patient {
@@ -50,6 +53,7 @@ export interface Doctor {
   prescriptions?: Prescription[];
   bills?: Bill[];
   medicalRecords?: MedicalRecord[];
+  avatar?: string;
 }
 
 export type AppointmentStatus = "NOTCOMFIRM" | "CONFIRMED" | "CANCELED";
@@ -94,10 +98,12 @@ export interface PrescriptionMedicine {
 export interface Medicine {
   id?: number;
   name: string;
-  unit: string;
+  unit: Unit;
   price: number;
   stock: number;
   note?: string;
+  importedPharmacy: string;
+  isDeleted?: boolean;
   prescriptionMedicines?: PrescriptionMedicine[];
 }
 

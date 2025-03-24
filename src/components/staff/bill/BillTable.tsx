@@ -1,7 +1,7 @@
 "use client";
 import { useGetBills, useUpdateBill } from "@/tanstackquery/bill";
 import { Bill } from "@/types/type";
-import React from "react";
+import React, { useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -30,8 +30,15 @@ const _totalCost = (bill: Bill) => {
 };
 const BillTable = () => {
   const { profile, role } = useAuthStore();
+
+  const [filter, setFilter] = useState<{
+    status: BillStatus | "ALL";
+  }>({
+    status: "ALL",
+  });
   const { data: bills, isPending } = useGetBills({
     patientId: role == "PATIENT" ? profile?.id : undefined,
+    status: filter.status == "ALL" ? undefined : filter.status,
   });
   // use update bill
   const updateBill = useUpdateBill();
@@ -69,6 +76,28 @@ const BillTable = () => {
       <h2 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-5 font-bold">
         Hóa Đơn
       </h2>
+      <div className="flex items-center p-4 gap-2">
+        <label className="m-0" htmlFor="status">
+          Trạng thái:
+        </label>
+        <select
+          id="status"
+          className="p-2 border border-gray-300 rounded-md"
+          value={filter.status}
+          onChange={(e) =>
+            setFilter({
+              ...filter,
+              status: e.target.value as BillStatus | "ALL",
+            })
+          }
+        >
+          <option value="ALL">Tất cả</option>
+          <option value="PENDING">Chưa thanh toán</option>
+          <option value="PAID">Đã thanh toán</option>
+          <option value="CANCELLED">Đã hủy</option>
+        </select>
+      </div>
+
       {isPending && <Loading />}
       {!isPending && (
         <div className="overflow-x-auto p-4">

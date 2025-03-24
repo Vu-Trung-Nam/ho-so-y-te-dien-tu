@@ -5,48 +5,38 @@ import {
 } from "@/tanstackquery/appointments";
 import { RefObject, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Appointment, Doctor } from "@/types/type";
-import { Modal, Form, DatePicker, Select } from "antd";
+import { Appointment, Staff } from "@/types/type";
+import { Modal, Form, DatePicker, Select, Input } from "antd";
 import { useForm } from "react-hook-form";
 import useAuthStore from "@/store/store";
-import {
-  useCreateDoctor,
-  useGetDoctors,
-  useUpdateDoctor,
-} from "@/tanstackquery/doctor";
-import { formatDateTime } from "@/lib/dateTime";
+import { useGetDoctors } from "@/tanstackquery/doctor";
+import { formatDateInput, formatDateTime } from "@/lib/dateTime";
 import {
   CreateMedicalRecordParams,
   useCreateMedicalRecord,
 } from "@/tanstackquery/medicalRecord";
-import { ICreateDoctor } from "@/app/api/doctors/route";
+import Signup from "../signup/Signup";
 import { ICreateAccount, useRegister } from "@/tanstackquery/account";
-import { Department } from "@prisma/client";
+import {
+  ICreateStaff,
+  useCreateStaff,
+  useUpdateStaff,
+} from "@/tanstackquery/staff";
 
 type Props = {
-  selectedDoctor: Doctor | null;
+  selectedStaff: Staff | null;
   isModalOpen: boolean;
   handleCloseModal: () => void;
 };
-const convertToBase64 = (file: any) => {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-};
 
-const CreateDoctorModal = ({
-  selectedDoctor,
+const CreateStaffModal = ({
   handleCloseModal,
   isModalOpen,
+  selectedStaff,
 }: Props) => {
-  const { profile } = useAuthStore();
-  const [loading, setLoading] = useState(false);
-  const createDoctor = useCreateDoctor();
-  const updateDoctor = useUpdateDoctor();
   const createAccount = useRegister();
+  const updateStaff = useUpdateStaff();
+  const createStaff = useCreateStaff();
   const {
     control,
     handleSubmit,
@@ -54,86 +44,77 @@ const CreateDoctorModal = ({
     reset,
     register,
     setValue,
-  } = useForm<ICreateDoctor & ICreateAccount>({
-    defaultValues: {},
+  } = useForm<ICreateStaff & ICreateAccount>({
+    defaultValues: { role: "STAFF" },
   });
-
-  const onSubmit = async (data: ICreateDoctor & ICreateAccount) => {
-    if (typeof data.avatar === "object") {
-      const file = data.avatar?.[0];
-      if (file) {
-        data.avatar = await convertToBase64(file);
-      }
+  useEffect(() => {
+    if (!selectedStaff) {
+      reset();
+    } else {
+      setValue("fullName", selectedStaff.fullName);
+      setValue("dob", formatDateInput(selectedStaff.dob || new Date()) as any);
+      setValue("gender", selectedStaff.gender);
+      setValue("position", selectedStaff.position);
+      setValue("phone", selectedStaff.phone);
+      setValue("department", selectedStaff.department);
+      setValue("username", selectedStaff.account?.username || "");
+      setValue("password", selectedStaff.account?.password || "");
+      setValue("accountId", selectedStaff.account?.id as number);
     }
-    if (selectedDoctor) {
+  }, [selectedStaff]);
+  const onSubmit = async (data: ICreateStaff & ICreateAccount) => {
+    if (selectedStaff) {
       try {
-        await updateDoctor.mutateAsync(
+        await updateStaff.mutateAsync(
           {
-            id: Number(selectedDoctor.id!),
-            doctor: {
+            id: Number(selectedStaff.id!),
+            body: {
               ...data,
             },
           },
           {
             onSuccess(response) {
-              toast.success(`Đã cập nhật bác sĩ thành công!`);
+              toast.success(`Đã cập nhật nhân viên thành công!`);
               handleCloseModal();
             },
             onError() {
-              toast.error("Đã xảy ra lỗi khi cập nhật bác sĩ!");
+              toast.error("Đã xảy ra lỗi khi cập nhật nhân viên!");
             },
           }
         );
       } catch (error) {
-        toast.error("Đã xảy ra lỗi khi tạo bác sĩ!");
+        toast.error("Đã xảy ra lỗi khi cập nhật nhân viên!");
       }
     } else {
       try {
         const account = await createAccount.mutateAsync({
           ...data,
-          role: "DOCTOR",
         });
-        await createDoctor.mutateAsync(
+        await createStaff.mutateAsync(
           {
             ...data,
             accountId: account.id,
           },
           {
             onSuccess(response) {
-              toast.success(`Đã tạo bác sĩ thành công!`);
+              toast.success(`Đã tạo nhân viên thành công!`);
               handleCloseModal();
             },
             onError() {
-              toast.error("Đã xảy ra lỗi khi tạo bác sĩ!");
+              toast.error("Đã xảy ra lỗi khi tạo nhân viên!");
             },
           }
         );
       } catch (error) {
-        toast.error("Đã xảy ra lỗi khi tạo bác sĩ!");
+        toast.error("Đã xảy ra lỗi khi tạo nhân viên!");
       }
     }
   };
-  useEffect(() => {
-    if (!selectedDoctor) {
-      reset();
-    }
-    if (selectedDoctor) {
-      setValue("userId", selectedDoctor.userId);
-      setValue("fullName", selectedDoctor.fullName as string);
-      setValue("specialization", selectedDoctor.specialization as string);
-      setValue("phone", selectedDoctor.phone as string);
-      setValue("department", selectedDoctor.department as Department);
-      setValue("avatar", selectedDoctor.avatar as string);
-      setValue("username", selectedDoctor.account?.username as string);
-      setValue("password", selectedDoctor.account?.password as string);
-    }
-  }, [selectedDoctor]);
-
   return (
     <>
       <Modal
         centered
-        title={selectedDoctor ? "Cập nhật bác sĩ" : "Tạo bác sĩ"}
+        title={"Thêm nhân viên"}
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={[
@@ -144,16 +125,15 @@ const CreateDoctorModal = ({
           >
             Quay lại
           </button>,
-
           <button
             key="submit"
             onClick={handleSubmit((data) => onSubmit(data))}
-            disabled={loading}
+            disabled={createAccount.isPending || createStaff.isPending}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors disabled:bg-blue-300 disabled:cursor-not-allowed"
           >
-            {loading
+            {createAccount.isPending || createStaff.isPending
               ? "Đang xử lý..."
-              : `${selectedDoctor ? "Cập nhật" : "Tạo"} bác sĩ`}
+              : `${selectedStaff ? "Cập nhật" : "Tạo"} nhân viên`}
           </button>,
         ]}
         width={800}
@@ -161,35 +141,42 @@ const CreateDoctorModal = ({
         <form className="space-y-6">
           <div className="form-group">
             <label className="block text-sm font-medium mb-2 text-gray-700">
-              Họ tên bác sĩ
+              Họ tên nhân viên
             </label>
             <input
               {...register("fullName", { required: true })}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
-
           <div className="form-group">
             <label className="block text-sm font-medium mb-2 text-gray-700">
-              Mã bác sĩ
+              Ngày sinh
             </label>
-            <input
-              {...register("userId")}
-              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-            />
+            <input type="date" {...register("dob", { required: true })} />
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium mb-2 text-gray-700">
-              Phòng ban
+              Giới tính
             </label>
             <select
-              {...register("department", { required: true })}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+              {...register("gender", { required: true })}
             >
-              <option value="KHOA_NOI_TONG_QUAT">Khoa nội tổng quát</option>
-              <option value="KHOA_NGOAI">Khoa ngoại</option>
-              <option value="KHOA_NHI">Khoa nhi</option>
-              <option value="KHOA_HOI_SUC_CAP_CUU">Khoa hồi sức cứu</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label className="block text-sm font-medium mb-2 text-gray-700">
+              Vị trí
+            </label>
+            <select
+              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+              {...register("position", { required: true })}
+            >
+              <option value="Nhân viên lễ tân">Nhân viên lễ tân</option>
+              <option value="Nhân viên kế toán">Nhân viên kế toán</option>
             </select>
           </div>
           <div className="form-group">
@@ -197,8 +184,17 @@ const CreateDoctorModal = ({
               Số điện thoại
             </label>
             <input
-              {...register("phone", { required: true })}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+              {...register("phone", { required: true })}
+            />
+          </div>
+          <div className="form-group">
+            <label className="block text-sm font-medium mb-2 text-gray-700">
+              Phòng ban
+            </label>
+            <input
+              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+              {...register("department", { required: true })}
             />
           </div>
           <div className="form-group">
@@ -206,9 +202,9 @@ const CreateDoctorModal = ({
               Tài khoản
             </label>
             <input
-              disabled={!!selectedDoctor}
-              {...register("username", { required: true })}
+              disabled={!!selectedStaff}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+              {...register("username", { required: true })}
             />
           </div>
           <div className="form-group">
@@ -216,25 +212,16 @@ const CreateDoctorModal = ({
               Mật khẩu
             </label>
             <input
-              disabled={!!selectedDoctor}
+              disabled={!!selectedStaff}
+              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
               {...register("password", { required: true })}
-              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
-          <div className="form-group">
-            <label className="block text-sm font-medium mb-2 text-gray-700">
-              Ảnh đại diện
-            </label>
-            <input
-              type="file"
-              {...register("avatar", { required: !selectedDoctor })}
-              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-            />
-          </div>
+          <div className="form-group"></div>
         </form>
       </Modal>
     </>
   );
 };
 
-export default CreateDoctorModal;
+export default CreateStaffModal;

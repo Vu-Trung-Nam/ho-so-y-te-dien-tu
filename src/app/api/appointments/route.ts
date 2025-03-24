@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import { Appointment } from "@/types/type";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 
 // GET /api/appointments - Get all appointments
 export async function GET(request: Request) {
@@ -41,7 +39,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body: Appointment = await request.json();
-console.log('body:',body)
+    console.log("body:", body);
     const appointment = await prisma.appointment.create({
       data: {
         appointmentDate: new Date(body?.appointmentDate),

@@ -1,17 +1,35 @@
 "use client";
 import Loading from "@/components/Icons/Loading";
+import CreatePatientModal from "@/components/patient/CreatePatientModal";
+import { useModal } from "@/hooks/useModal";
 import { formatDateTime, formatDob } from "@/lib/dateTime";
 import { useGetPatients } from "@/tanstackquery/patients";
-import React from "react";
+import { Patient } from "@prisma/client";
+import React, { useState } from "react";
 
 const Page = () => {
   const { data, isPending } = useGetPatients();
+  //  use hook useModal
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const { modal, openModal, closeModal } = useModal({
+    CreatePatientModal: false,
+  });
   return (
-    <div className="space-y-5 min-h-screen">
+    <div className="space-y-5 min-h-screen container">
       <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-4 font-bold">
         QUẢN LÝ BỆNH NHÂN
       </h1>
-
+      <div>
+        <button
+          className="btn"
+          onClick={() => {
+            setSelectedPatient(null);
+            openModal("CreatePatientModal");
+          }}
+        >
+          Thêm bệnh nhân
+        </button>
+      </div>
       <div className="px-10 rounded-lg">
         <div className="overflow-x-auto mt-2">
           {isPending && <Loading />}
@@ -74,6 +92,10 @@ const Page = () => {
           )}
         </div>
       </div>
+      <CreatePatientModal
+        handleCloseModal={() => closeModal("CreatePatientModal")}
+        isModalOpen={modal.CreatePatientModal}
+      />
     </div>
   );
 };

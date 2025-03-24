@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import { ICreateDoctor } from "../route";
+import prisma from "@/lib/prisma";
 
-const prisma = new PrismaClient();
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
@@ -34,6 +33,7 @@ export async function GET(
 }
 
 // update doctor
+
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ slug: string }> }
@@ -58,8 +58,27 @@ export async function PUT(
         specialization,
         phone,
         department,
-        avatar
+        avatar,
       },
+    });
+    return NextResponse.json(doctor);
+  } catch (error) {
+    console.error("Error updating doctor:", error);
+    return NextResponse.json(
+      { error: "Failed to update doctor" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  try {
+    const { slug } = await params;
+    const doctor = await prisma.doctor.delete({
+      where: { id: Number(slug) },
     });
     return NextResponse.json(doctor);
   } catch (error) {

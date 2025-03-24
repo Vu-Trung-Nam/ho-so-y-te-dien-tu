@@ -73,6 +73,7 @@ const CreateTestResultModal = ({
   return (
     <>
       <Modal
+        centered
         title={"Thêm kết quả xét nghiệm"}
         open={isModalOpen}
         onCancel={handleCloseModal}

@@ -1,18 +1,36 @@
 "use client";
 import Loading from "@/components/Icons/Loading";
+import CreateStaffModal from "@/components/staff/CreateStaffModal";
+import { useModal } from "@/hooks/useModal";
 import { formatDateTime, formatDob } from "@/lib/dateTime";
 import { useGetPatients } from "@/tanstackquery/patients";
 import { useGetStaffs } from "@/tanstackquery/staff";
-import React from "react";
+import { Staff } from "@/types/type";
+import React, { useState } from "react";
 
 const Page = () => {
   const { data, isPending } = useGetStaffs();
+  // useModal
+  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+  const { modal, openModal, closeModal } = useModal({
+    CreateStaffModal: false,
+  });
   return (
-    <div className="space-y-5 min-h-screen">
+    <div className="space-y-5 min-h-screen container">
       <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-4 font-bold">
         QUẢN LÝ NHÂN VIÊN
       </h1>
-
+      <div>
+        <button
+          className="btn"
+          onClick={() => {
+            setSelectedStaff(null);
+            openModal("CreateStaffModal");
+          }}
+        >
+          Thêm nhân viên
+        </button>
+      </div>
       <div className="px-10 rounded-lg">
         <div className="overflow-x-auto mt-2">
           {isPending && <Loading />}
@@ -39,11 +57,14 @@ const Page = () => {
                   <th scope="col" className="px-6 py-3">
                     PHÒNG BAN
                   </th>
+                  <th scope="col" className="px-6 py-3">
+                    TÙY CHỌN
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {data &&
-                  data.map((patient, index: any) => {
+                  data.map((staff, index: any) => {
                     return (
                       <tr
                         key={index}
@@ -55,13 +76,24 @@ const Page = () => {
                         >
                           {index + 1}
                         </th>
-                        <td className="px-6 py-3">{patient.fullName}</td>
+                        <td className="px-6 py-3">{staff.fullName}</td>
                         <td className="px-6 py-3">
-                          {formatDob(patient?.dob || new Date())}
+                          {formatDob(staff?.dob || new Date())}
                         </td>
-                        <td className="px-6 py-3">{patient.gender}</td>
-                        <td className="px-6 py-3">{patient.position}</td>
-                        <td className="px-6 py-3">{patient.department}</td>
+                        <td className="px-6 py-3">{staff.gender}</td>
+                        <td className="px-6 py-3">{staff.position}</td>
+                        <td className="px-6 py-3">{staff.department}</td>
+                        <td className="px-6 py-3">
+                          <button
+                            className="btn"
+                            onClick={() => {
+                              setSelectedStaff(staff as Staff);
+                              openModal("CreateStaffModal");
+                            }}
+                          >
+                            Sửa
+                          </button>
+                        </td>
                       </tr>
                     );
                   })}
@@ -70,6 +102,11 @@ const Page = () => {
           )}
         </div>
       </div>
+      <CreateStaffModal
+        isModalOpen={modal.CreateStaffModal}
+        handleCloseModal={() => closeModal("CreateStaffModal")}
+        selectedStaff={selectedStaff}
+      />
     </div>
   );
 };

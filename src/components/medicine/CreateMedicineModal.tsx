@@ -5,32 +5,41 @@ import {
 } from "@/tanstackquery/appointments";
 import { RefObject, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Appointment } from "@/types/type";
+import { Appointment, Doctor, Medicine } from "@/types/type";
 import { Modal, Form, DatePicker, Select } from "antd";
 import { useForm } from "react-hook-form";
 import useAuthStore from "@/store/store";
-import { useGetDoctors } from "@/tanstackquery/doctor";
+import {
+  useCreateDoctor,
+  useGetDoctors,
+  useUpdateDoctor,
+} from "@/tanstackquery/doctor";
 import { formatDateTime } from "@/lib/dateTime";
 import {
   CreateMedicalRecordParams,
   useCreateMedicalRecord,
 } from "@/tanstackquery/medicalRecord";
+import { ICreateDoctor } from "@/app/api/doctors/route";
+import { ICreateAccount, useRegister } from "@/tanstackquery/account";
+import { useCreateMedicine, useUpdateMedicine } from "@/tanstackquery/medicine";
+import { ICreateMedicine } from "@/app/api/medicine/route";
+import { Unit } from "@prisma/client";
 
 type Props = {
-  selectedAppointment: Appointment | null;
+  selectedMedicine: Medicine | null;
   isModalOpen: boolean;
   handleCloseModal: () => void;
 };
 
-const CreateMedicalRecordModal = ({
-  selectedAppointment,
+const CreateMedidineModal = ({
+  selectedMedicine,
   handleCloseModal,
   isModalOpen,
 }: Props) => {
   const { profile } = useAuthStore();
   const [loading, setLoading] = useState(false);
-  const createMedicalRecord = useCreateMedicalRecord();
-  const { data: doctors } = useGetDoctors();
+  const createMedicine = useCreateMedicine();
+  const updateMedicine = useUpdateMedicine();
   const {
     control,
     handleSubmit,
@@ -38,45 +47,64 @@ const CreateMedicalRecordModal = ({
     reset,
     register,
     setValue,
-  } = useForm<CreateMedicalRecordParams>({
+  } = useForm<Medicine>({
     defaultValues: {},
   });
 
-  const onSubmit = async (data: CreateMedicalRecordParams) => {
-    setLoading(true);
-    try {
-      await createMedicalRecord.mutateAsync(
-        {
+  const onSubmit = async (data: Medicine) => {
+    console.log("data:", data);
+    if (selectedMedicine) {
+      try {
+        await updateMedicine.mutateAsync(
+          {
+            ...data,
+          },
+          {
+            onSuccess(response) {
+              toast.success(`Đã cập nhật thuốc thành công!`);
+              handleCloseModal();
+            },
+            onError() {
+              toast.error("Đã xảy ra lỗi khi cập nhật thuốc!");
+            },
+          }
+        );
+      } catch (error) {
+        toast.error("Đã xảy ra lỗi khi cập nhật thuốc!");
+      }
+    } else {
+      try {
+        await createMedicine.mutateAsync({
           ...data,
-        },
-        {
-          onSuccess(response) {
-            toast.success(`Đã tạo sổ khám bệnh thành công!`);
-            handleCloseModal();
-          },
-          onError() {
-            toast.error("Đã xảy ra lỗi khi tạo sổ khám bệnh!");
-          },
-        }
-      );
-    } finally {
-      setLoading(false);
+        });
+        toast.success(`Đã tạo thuốc thành công!`);
+        handleCloseModal();
+      } catch (error) {
+        toast.error("Đã xảy ra lỗi khi tạo thuốc!");
+      }
     }
   };
   useEffect(() => {
-    if (selectedAppointment) {
-      setValue("doctorId", selectedAppointment.doctorId!);
-      setValue("patientId", selectedAppointment.patientId);
-      setValue("appointmentId", selectedAppointment.id!);
-      setValue("symptoms", selectedAppointment.symptoms);
+    if (!selectedMedicine) {
+      reset();
     }
-  }, [selectedAppointment]);
+    if (selectedMedicine) {
+      setValue("id", selectedMedicine.id);
+      setValue("isDeleted", selectedMedicine.isDeleted);
+      setValue("name", selectedMedicine.name);
+      setValue("unit", selectedMedicine.unit as Unit);
+      setValue("price", selectedMedicine.price);
+      setValue("stock", selectedMedicine.stock);
+      setValue("note", selectedMedicine.note as string);
+      setValue("importedPharmacy", selectedMedicine.importedPharmacy);
+    }
+  }, [selectedMedicine]);
 
   return (
     <>
       <Modal
         centered
-        title={"Tạo sổ khám bệnh"}
+        title={selectedMedicine ? "Cập nhật thuốc" : "Tạo thuốc"}
         open={isModalOpen}
         onCancel={handleCloseModal}
         footer={[
@@ -94,7 +122,9 @@ const CreateMedicalRecordModal = ({
             disabled={loading}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors disabled:bg-blue-300 disabled:cursor-not-allowed"
           >
-            {loading ? "Đang xử lý..." : "Tạo sổ khám bệnh"}
+            {loading
+              ? "Đang xử lý..."
+              : `${selectedMedicine ? "Cập nhật" : "Tạo"} thuốc`}
           </button>,
         ]}
         width={800}
@@ -102,52 +132,39 @@ const CreateMedicalRecordModal = ({
         <form className="space-y-6">
           <div className="form-group">
             <label className="block text-sm font-medium mb-2 text-gray-700">
-              Tên bệnh nhân
+              Tên thuốc
             </label>
             <input
-              value={selectedAppointment?.patient.fullName}
-              disabled
+              {...register("name", { required: true })}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium mb-2 text-gray-700">
-              Bác sĩ khám
+              Đơn vị
+            </label>
+            <select {...register("unit", { required: true })}>
+              <option value="PILL">Viên</option>
+              <option value="BOTTLE">Chai</option>
+              <option value="CAPSULE">Viên nén</option>
+              <option value="INJECTION">Tiêm</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label className="block text-sm font-medium mb-2 text-gray-700">
+              Giá mỗi đơn vị
             </label>
             <input
-              value={selectedAppointment?.doctor?.fullName}
-              disabled
+              {...register("price", { required: true })}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium mb-2 text-gray-700">
-              Ngày giờ khám
+              Số lượng
             </label>
             <input
-              value={formatDateTime(selectedAppointment?.appointmentDate!)}
-              disabled
-              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="block text-sm font-medium mb-2 text-gray-700">
-              Triệu chứng bệnh (ví dụ: đau họng, ho, sốt, ...)
-            </label>
-            <input
-              disabled
-              value={selectedAppointment?.symptoms}
-              placeholder="Nhập các triệu chứng bạn đang gặp phải"
-              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-            />
-          </div>
-          <div className="form-group">
-            <label className="block text-sm font-medium mb-2 text-gray-700">
-              Chẩn đoán
-            </label>
-            <input
-              {...register("diagnosis")}
+              {...register("stock", { required: true })}
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
@@ -160,10 +177,19 @@ const CreateMedicalRecordModal = ({
               className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
             />
           </div>
+          <div className="form-group">
+            <label className="block text-sm font-medium mb-2 text-gray-700">
+              Nguồn thuốc
+            </label>
+            <input
+              {...register("importedPharmacy")}
+              className="w-full px-4 py-2.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+            />
+          </div>
         </form>
       </Modal>
     </>
   );
 };
 
-export default CreateMedicalRecordModal;
+export default CreateMedidineModal;

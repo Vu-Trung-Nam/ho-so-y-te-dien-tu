@@ -31,25 +31,27 @@ model Account {
   patient   Patient?
   doctor    Doctor?
   staff     Staff?
+  isDeleted Boolean  @default(false)
 }
 
 // nhan vien
 model Staff {
   id         Int       @id @default(autoincrement())
-  accountId  Int?      @unique
+  accountId  Int       @unique
   dob        DateTime?
   gender     String?
   fullName   String?
   position   String?
   phone      String?
   department String?
-  account    Account?  @relation(fields: [accountId], references: [id])
+  account    Account   @relation(fields: [accountId], references: [id])
+  isDeleted  Boolean   @default(false)
 }
 
 // benh nhan
 model Patient {
   id                Int             @id @default(autoincrement())
-  accountId         Int?            @unique
+  accountId         Int             @unique
   fullName          String
   dob               DateTime?
   gender            String?
@@ -57,12 +59,13 @@ model Patient {
   address           String?
   citizenId         String          @unique
   healthInsuranceId String?
-  account           Account?        @relation(fields: [accountId], references: [id])
+  account           Account         @relation(fields: [accountId], references: [id])
   appointments      Appointment[]
   prescriptions     Prescription[]
   bills             Bill[]
   medicalRecords    MedicalRecord[]
   TestResult        TestResult[]
+  isDeleted         Boolean         @default(false)
 }
 
 // bac si
@@ -76,7 +79,7 @@ enum Department {
 
 model Doctor {
   id             Int     @id @default(autoincrement())
-  accountId      Int?    @unique
+  accountId      Int     @unique
   userId         String  @unique
   fullName       String?
   specialization String?
@@ -84,12 +87,13 @@ model Doctor {
   avatar         String?
 
   department     Department
-  account        Account?        @relation(fields: [accountId], references: [id])
+  account        Account         @relation(fields: [accountId], references: [id])
   appointments   Appointment[]
   prescriptions  Prescription[]
   bills          Bill[]
   medicalRecords MedicalRecord[]
   TestResult     TestResult[]
+  isDeleted      Boolean         @default(false)
 }
 
 // lich kham
@@ -110,6 +114,7 @@ model Appointment {
   patient       Patient        @relation(fields: [patientId], references: [id])
   doctor        Doctor?        @relation(fields: [doctorId], references: [id])
   medicalRecord MedicalRecord?
+  isDeleted     Boolean        @default(false)
 }
 
 // trang thai don thuoc
@@ -132,6 +137,7 @@ model Prescription {
   doctor                Doctor                 @relation(fields: [doctorId], references: [id])
   prescriptionMedicines PrescriptionMedicine[]
   bill                  Bill?                  @relation(fields: [billId], references: [id])
+  isDeleted             Boolean                @default(false)
 }
 
 // Bảng trung gian
@@ -166,6 +172,8 @@ model Medicine {
   stock                 Int // số lượng trong kho
   note                  String?
   prescriptionMedicines PrescriptionMedicine[]
+  isDeleted             Boolean                @default(false)
+  importedPharmacy      String
 }
 
 // xet nghiem
@@ -184,6 +192,7 @@ model TestResult {
   patient        Patient  @relation(fields: [patientId], references: [id])
   doctor         Doctor   @relation(fields: [doctorId], references: [id])
   bill           Bill?    @relation(fields: [billId], references: [id])
+  isDeleted      Boolean  @default(false)
 }
 
 // hoa don
@@ -208,6 +217,7 @@ model Bill {
   medicalRecord MedicalRecord  @relation(fields: [medicalRecordId], references: [id])
   prescriptions Prescription[]
   testResults   TestResult[]
+  isDeleted     Boolean        @default(false)
 }
 
 // so kham benh
@@ -225,4 +235,5 @@ model MedicalRecord {
   doctor      Doctor      @relation(fields: [doctorId], references: [id])
   appointment Appointment @relation(fields: [appointmentId], references: [id])
   bill        Bill?
+  isDeleted   Boolean     @default(false)
 }

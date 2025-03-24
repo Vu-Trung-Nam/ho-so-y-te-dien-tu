@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 import { ICreateDoctor } from "@/app/api/doctors/route";
-import { Doctor } from "@prisma/client";
+import { Doctor } from "@/types/type";
 
 export const useGetDoctors = (params?: {
   fullName?: string;
@@ -40,16 +40,14 @@ export const useCreateDoctor = () => {
 };
 
 // Update doctor
+export interface IUpdateDoctor {
+  id: number;
+  doctor: ICreateDoctor;
+}
 export const useUpdateDoctor = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({
-      id,
-      doctor,
-    }: {
-      id: number;
-      doctor: ICreateDoctor;
-    }) => {
+    mutationFn: async ({ id, doctor }: IUpdateDoctor) => {
       const { data } = await axios.put(`/api/doctors/${id}`, doctor);
       return data;
     },

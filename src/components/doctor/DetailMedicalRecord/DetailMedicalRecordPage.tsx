@@ -85,7 +85,7 @@ const DetailMedicalRecordPage = ({ medicalRecordID }: Props) => {
               <li className="flex justify-between items-center py-2 border-b last:border-none">
                 <span className="text-gray-900 font-semibold">Giới tính:</span>
                 <span className="text-gray-500 font-medium">
-                  {data?.patient.gender === "male" ? "Nam" : "Nữ"}
+                  {data?.patient.gender}
                 </span>
               </li>
             </ul>

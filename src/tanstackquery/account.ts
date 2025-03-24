@@ -7,19 +7,11 @@ interface LoginCredentials {
   password: string;
 }
 
-interface RegisterData {
+export interface ICreateAccount {
   username: string;
   password: string;
-  email: string;
   role: "PATIENT" | "DOCTOR" | "STAFF";
-  fullName: string;
-  dob?: string;
-  gender?: string;
-  phone: string;
-  address?: string;
-  specialization?: string;
-  department?: string;
-  position?: string;
+  email?: string;
 }
 
 // Login mutation hook
@@ -42,7 +34,7 @@ export const useLogin = () => {
 // Register mutation hook
 export const useRegister = () => {
   return useMutation({
-    mutationFn: async (registerData: RegisterData) => {
+    mutationFn: async (registerData: ICreateAccount) => {
       try {
         const { data } = await axios.post("/api/accounts", registerData);
         return data;

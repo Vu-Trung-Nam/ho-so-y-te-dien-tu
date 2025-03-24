@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 
 // GET /api/patients - Get all patients
 export async function GET() {
@@ -30,25 +28,26 @@ export async function POST(request: Request) {
     const body = await request.json();
     const patient = await prisma.patient.create({
       data: {
-        fullName: body.fullName,
-        dob: new Date(body.dob),
-        gender: body.gender,
-        phone: body.phone,
-        address: body.address,
-        citizenId:body.citizenId
-        
+        fullName: body?.fullName,
+        dob: body?.dob,
+        gender: body?.gender,
+        phone: body?.phone,
+        address: body?.address,
+        citizenId: body?.citizenId,
+        accountId: body?.accountId,
+        healthInsuranceId: body?.healthInsuranceId,
       },
       include: {
         account: true,
         appointments: true,
         prescriptions: true,
         bills: true,
-
         medicalRecords: true,
       },
     });
     return NextResponse.json(patient);
   } catch (error) {
+    console.log(String(error));
     return NextResponse.json(
       { error: "Failed to create patient" },
       { status: 500 }
