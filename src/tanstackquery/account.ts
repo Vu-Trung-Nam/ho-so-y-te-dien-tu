@@ -1,6 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { Account } from "@/types/type";
 
 interface LoginCredentials {
   username: string;
@@ -10,7 +11,7 @@ interface LoginCredentials {
 export interface ICreateAccount {
   username: string;
   password: string;
-  role: "PATIENT" | "DOCTOR" | "STAFF";
+  role: "PATIENT" | "DOCTOR" | "STAFF" | "ADMIN";
   email?: string;
 }
 
@@ -47,5 +48,43 @@ export const useRegister = () => {
         throw error;
       }
     },
+  });
+};
+
+// update account
+export const useUpdateAccount = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      account,
+    }: {
+      id: number;
+      account: ICreateAccount;
+    }) => {
+      const { data } = await axios.put(`/api/accounts/${id}`, account);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    },
+  });
+};
+
+// get all accounts
+export const useGetAllAccounts = () => {
+  return useQuery({
+    queryKey: ["accounts"],
+    queryFn: async () => {
+      const { data } = await axios.get<Account[]>("/api/accounts");
+      return data;
+    },
+  });
+};
+
+// delete account
+export const useDeleteAccount = () => {
+  return useMutation({
+    mutationFn: async (id: number) => await axios.delete(`/api/accounts/${id}`),
   });
 };

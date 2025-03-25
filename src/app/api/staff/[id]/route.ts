@@ -1,7 +1,7 @@
 // get detail staff
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { staffSchema } from "../route";
+import { staffSchema } from "@/lib/zod/staff";
 
 export async function GET(
   request: Request,

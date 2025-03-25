@@ -90,9 +90,8 @@ const CreateMedidineModal = ({
     }
     if (selectedMedicine) {
       setValue("id", selectedMedicine.id);
-      setValue("isDeleted", selectedMedicine.isDeleted);
       setValue("name", selectedMedicine.name);
-      setValue("unit", selectedMedicine.unit as Unit);
+      setValue("unit", selectedMedicine.unit as any);
       setValue("price", selectedMedicine.price);
       setValue("stock", selectedMedicine.stock);
       setValue("note", selectedMedicine.note as string);

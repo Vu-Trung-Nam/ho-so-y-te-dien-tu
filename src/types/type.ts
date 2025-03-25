@@ -98,12 +98,12 @@ export interface PrescriptionMedicine {
 export interface Medicine {
   id?: number;
   name: string;
-  unit: Unit;
+  unit: string;
   price: number;
   stock: number;
   note?: string;
   importedPharmacy: string;
-  isDeleted?: boolean;
+  isDeleted: boolean;
   prescriptionMedicines?: PrescriptionMedicine[];
 }
 

@@ -96,6 +96,9 @@ const Header = () => {
               <li className={pathname === "/admin/medicine" ? "active" : ""}>
                 <Link href="/admin/medicine">QL Thuốc </Link>
               </li>
+              <li className={pathname === "/admin/account" ? "active" : ""}>
+                <Link href="/admin/account">QL Tài khoản </Link>
+              </li>
             </ul>
           </nav>
         </div>

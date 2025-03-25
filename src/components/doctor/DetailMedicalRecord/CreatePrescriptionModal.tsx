@@ -119,7 +119,6 @@ const CreatePrescriptionModal = ({
         onOk={handleSubmit(onSubmit)}
         confirmLoading={loading}
         width={1300}
-        centered
         footer={[
           <Button key="cancel" onClick={handleCloseModal}>
             Hủy
