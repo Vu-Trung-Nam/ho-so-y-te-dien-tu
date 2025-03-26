@@ -3,7 +3,9 @@ import Loading from "@/components/Icons/Loading";
 import { formatDateTime, formatDateTimeBill } from "@/lib/dateTime";
 import { useGetBills } from "@/tanstackquery/bill";
 import React, { useEffect, useState } from "react";
-
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import "./Roboto.js";
 type Invoice = {
   id: number;
   patientId: number;
@@ -121,7 +123,7 @@ const Page = () => {
       }
     >;
 
-    const summaryByDay = invoices.reduce<SummaryByDay>((acc, invoice) => {
+    const summaryByDay = data.reduce<SummaryByDay>((acc, invoice) => {
       const date = String(invoice.paidAt).split("T")[0]; // Lấy ngày (YYYY-MM-DD)
 
       if (!acc[date]) {
@@ -152,11 +154,52 @@ const Page = () => {
 
     setListBill(result);
   }, [data]);
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(10);
+    doc.setFont("Roboto-VariableFont_wdth,wght");
+
+    // Thêm tiêu đề
+    doc.text("BÁO CÁO DOANH THU", 20, 10);
+
+    // Dữ liệu bảng
+    const tableColumn = [
+      "STT",
+      "NGAY",
+      "DOANH THU",
+      "BENH NHAN",
+      "PHIEU XET NGHIEM",
+      "DON THUOC",
+    ];
+
+    const tableRows = listBill.map((bill: any, index: number) => [
+      index + 1,
+      bill.date,
+      bill.totalRevenue,
+      bill.totalPatients,
+      bill.totalTestResults,
+      bill.totalPrescriptions,
+    ]);
+
+    // Sử dụng autoTable
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+      styles: { fontSize: 5, font: "Roboto-VariableFont_wdth,wght" },
+    });
+
+    // Xuất file PDF
+    doc.save("Bao-cao-doanh-thu.pdf");
+  };
   return (
-    <div className="space-y-5 min-h-screen">
+    <div className="space-y-5 min-h-screen container">
       <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-4 font-bold">
         DOANH THU
       </h1>
+      <button className="btn" onClick={generatePDF}>
+        Xuất báo cáo
+      </button>
       {typeFilter == "DAY" && (
         <div className="px-10 rounded-lg">
           {/* <div className="form-group">
