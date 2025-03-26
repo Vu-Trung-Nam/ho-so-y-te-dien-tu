@@ -24,7 +24,7 @@ type Invoice = {
 };
 
 const Page = () => {
-  const { data, isPending } = useGetBills({});
+  const { data, isPending } = useGetBills({ status:"PAID"});
 
   const [typeFilter, setTypeFilter] = useState<"DAY" | "MONTH">("DAY");
   const [listBill, setListBill] = useState<any>([]);

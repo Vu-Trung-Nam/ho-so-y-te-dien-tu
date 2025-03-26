@@ -91,6 +91,7 @@ const AccountListTable = () => {
                       <td className="px-6 py-4">{account.email}</td>
                       <td className="px-6 py-4">{account.role}</td>
                       <td className="px-6 py-4 space-x-2">
+                        <div className="flex gap-2 flex-col justify-center items-center">
                         <Popover>
                           <PopoverTrigger className="btn">
                             Đổi mật khẩu
@@ -162,6 +163,7 @@ const AccountListTable = () => {
                             </button>
                           </PopoverContent>
                         </Popover>
+                        </div>
                       </td>
                     </tr>
                   );
