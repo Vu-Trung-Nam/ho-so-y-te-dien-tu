@@ -12,6 +12,7 @@ export async function GET(request: Request) {
     const doctors = await prisma.doctor.findMany({
       orderBy: { id: "asc" },
       where: {
+        isDeleted: false,
         department: (department as Department) || undefined,
       },
       include: {

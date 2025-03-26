@@ -12,6 +12,7 @@ export async function GET(request: Request) {
       where: {
         status: status ? (status as BillStatus) : undefined,
         patientId: patientId ? Number(patientId) : undefined,
+        isDeleted: false,
       },
       include: {
         patient: true,

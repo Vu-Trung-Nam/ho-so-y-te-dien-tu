@@ -121,7 +121,7 @@ const Page = () => {
       }
     >;
 
-    const summaryByDay = data.reduce<SummaryByDay>((acc, invoice) => {
+    const summaryByDay = invoices.reduce<SummaryByDay>((acc, invoice) => {
       const date = String(invoice.paidAt).split("T")[0]; // Lấy ngày (YYYY-MM-DD)
 
       if (!acc[date]) {

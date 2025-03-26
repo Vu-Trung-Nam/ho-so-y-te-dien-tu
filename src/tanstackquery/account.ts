@@ -84,7 +84,11 @@ export const useGetAllAccounts = () => {
 
 // delete account
 export const useDeleteAccount = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: number) => await axios.delete(`/api/accounts/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    },
   });
 };

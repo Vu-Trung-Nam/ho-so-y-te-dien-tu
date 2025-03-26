@@ -62,3 +62,14 @@ export const useUpdateStaff = (params?: {}) => {
     },
   });
 };
+
+// useDeleteStaff
+export const useDeleteStaff = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => await axios.delete(`/api/staff/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["staffs"] });
+    },
+  });
+};

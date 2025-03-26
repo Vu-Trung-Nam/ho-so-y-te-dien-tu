@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {
   ICreateAccount,
+  useDeleteAccount,
   useGetAllAccounts,
   useUpdateAccount,
 } from "@/tanstackquery/account";
@@ -17,6 +18,7 @@ import { z } from "node_modules/zod/lib";
 const AccountListTable = () => {
   const { data, isPending } = useGetAllAccounts();
   const updateAccount = useUpdateAccount();
+  const deleteAccount = useDeleteAccount();
   const [password, setPassword] = useState("");
   const _handleChangePassword = async (id: number, account: ICreateAccount) => {
     await updateAccount.mutateAsync(
@@ -30,6 +32,16 @@ const AccountListTable = () => {
         },
       }
     );
+  };
+  const _handleDeleteAccount = async (id: number) => {
+    await deleteAccount.mutateAsync(id, {
+      onSuccess: () => {
+        toast.success("Đã xóa tài khoản thành công!");
+      },
+      onError: (error) => {
+        toast.error("Đã xóa tài khoản thất bại");
+      },
+    });
   };
   return (
     <div className="px-10 rounded-lg">
@@ -78,7 +90,7 @@ const AccountListTable = () => {
                       <td className="px-6 py-4">{account.password}</td>
                       <td className="px-6 py-4">{account.email}</td>
                       <td className="px-6 py-4">{account.role}</td>
-                      <td>
+                      <td className="px-6 py-4 space-x-2">
                         <Popover>
                           <PopoverTrigger className="btn">
                             Đổi mật khẩu
@@ -124,7 +136,29 @@ const AccountListTable = () => {
                                 });
                               }}
                             >
-                              Đổi mật khẩu
+                              {updateAccount.isPending
+                                ? "Đang đổi mật khẩu..."
+                                : "Đổi mật khẩu"}
+                            </button>
+                          </PopoverContent>
+                        </Popover>
+                        <Popover>
+                          <PopoverTrigger className="btn">
+                            Xóa tài khoản
+                          </PopoverTrigger>
+                          <PopoverContent className="space-y-2">
+                            <label htmlFor="password">
+                              Bạn có chắc chắn muốn xóa tài khoản này không?
+                            </label>
+                            <button
+                              className="btn"
+                              onClick={() => {
+                                _handleDeleteAccount(Number(account.id));
+                              }}
+                            >
+                              {deleteAccount.isPending
+                                ? "Đang xóa..."
+                                : "Xóa tài khoản"}
                             </button>
                           </PopoverContent>
                         </Popover>

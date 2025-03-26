@@ -8,6 +8,9 @@ export async function GET() {
   try {
     const staff = await prisma.staff.findMany({
       orderBy: { id: "asc" },
+      where: {
+        isDeleted: false,
+      },
       include: {
         account: true,
       },

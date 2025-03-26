@@ -56,8 +56,11 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const medicine = await prisma.medicine.delete({
+    const medicine = await prisma.medicine.update({
       where: { id: Number(id) },
+      data: {
+        isDeleted: true,
+      },
     });
     return NextResponse.json(medicine);
   } catch (error) {

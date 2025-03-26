@@ -9,6 +9,7 @@ export async function GET(request: Request) {
     const medicalRecords = await prisma.medicalRecord.findMany({
       where: {
         patientId: patientId ? Number(patientId) : undefined,
+        isDeleted: false,
       },
       include: {
         patient: true,

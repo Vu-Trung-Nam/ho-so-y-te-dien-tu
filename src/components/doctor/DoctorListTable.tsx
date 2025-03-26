@@ -1,5 +1,5 @@
 "use client";
-import { useGetDoctors } from "@/tanstackquery/doctor";
+import { useDeleteDoctor, useGetDoctors } from "@/tanstackquery/doctor";
 import { Department } from "@prisma/client";
 import React, { useState } from "react";
 import Loading from "../Icons/Loading";
@@ -9,6 +9,8 @@ import { ICreateDoctor } from "@/app/api/doctors/route";
 import Image from "next/image";
 import { ICreateAccount } from "@/tanstackquery/account";
 import { Doctor } from "@/types/type";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { toast } from "react-toastify";
 const departmentName = {
   KHOA_NOI_TONG_QUAT: "Khoa nội tổng quát",
   KHOA_NGOAI: "Khoa ngoại",
@@ -30,6 +32,7 @@ const DoctorListTable = () => {
     ""
   );
   const [modal, setModal] = useState({ CreateDoctorModal: false });
+  const deleteDoctor = useDeleteDoctor();
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const _handleOpenModal = (modalName: keyof typeof modal) => {
     setModal((prev) => ({ ...prev, [modalName]: true }));
@@ -42,6 +45,16 @@ const DoctorListTable = () => {
     department: selectedDepartment || undefined,
   });
 
+  const _handleDeleteDoctor = (id: number) => {
+    deleteDoctor.mutateAsync(id, {
+      onSuccess: () => {
+        toast.success("Đã xóa bác sĩ thành công");
+      },
+      onError: (error) => {
+        toast.error("Đã xóa bác sĩ thất bại");
+      },
+    });
+  };
   return (
     <div className="px-10 rounded-lg">
       <div className="form-group">
@@ -135,7 +148,7 @@ const DoctorListTable = () => {
                       </td>
                       <td className="px-6 py-4">{doctor?.account?.username}</td>
                       <td className="px-6 py-4">{doctor?.account?.password}</td>
-                      <td>
+                      <td className="px-6 py-4 space-x-2">
                         {role == "ADMIN" && (
                           <>
                             <button
@@ -148,6 +161,24 @@ const DoctorListTable = () => {
                               Sửa
                             </button>
                           </>
+                        )}
+                        {role == "ADMIN" && (
+                          <Popover>
+                            <PopoverTrigger className="btn">Xóa</PopoverTrigger>
+                            <PopoverContent className="w-80 space-y-2">
+                              <p className="text-lg font-bold">
+                                Xác nhận xóa bác sĩ {doctor.fullName}?
+                              </p>
+                              <button
+                                className="btn mx-auto block w-full"
+                                onClick={() => {
+                                  _handleDeleteDoctor(doctor.id as number);
+                                }}
+                              >
+                                {deleteDoctor.isPending ? "Đang xóa..." : "Xóa"}
+                              </button>
+                            </PopoverContent>
+                          </Popover>
                         )}
                       </td>
                     </tr>

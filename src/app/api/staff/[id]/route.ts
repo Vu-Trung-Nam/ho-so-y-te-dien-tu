@@ -57,8 +57,11 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const staff = await prisma.staff.delete({
+    const staff = await prisma.staff.update({
       where: { id: Number(id) },
+      data: {
+        isDeleted: true,
+      },
     });
     return NextResponse.json(staff);
   } catch (error) {

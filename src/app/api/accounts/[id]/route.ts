@@ -29,18 +29,21 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { slug } = await params;
-    const doctor = await prisma.doctor.delete({
-      where: { id: Number(slug) },
+    const { id } = await params;
+    const account = await prisma.account.update({
+      where: { id: Number(id) },
+      data: {
+        isDeleted: true,
+      },
     });
-    return NextResponse.json(doctor);
+    return NextResponse.json(account);
   } catch (error) {
-    console.error("Error updating doctor:", error);
+    console.error("Error updating account:", error);
     return NextResponse.json(
-      { error: "Failed to update doctor" },
+      { error: "Failed to update account" },
       { status: 500 }
     );
   }

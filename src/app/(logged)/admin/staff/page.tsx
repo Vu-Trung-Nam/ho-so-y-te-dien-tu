@@ -1,12 +1,18 @@
 "use client";
 import Loading from "@/components/Icons/Loading";
 import CreateStaffModal from "@/components/staff/CreateStaffModal";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { useModal } from "@/hooks/useModal";
 import { formatDateTime, formatDob } from "@/lib/dateTime";
 import { useGetPatients } from "@/tanstackquery/patients";
-import { useGetStaffs } from "@/tanstackquery/staff";
+import { useDeleteStaff, useGetStaffs } from "@/tanstackquery/staff";
 import { Staff } from "@/types/type";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const Page = () => {
   const { data, isPending } = useGetStaffs();
@@ -15,6 +21,17 @@ const Page = () => {
   const { modal, openModal, closeModal } = useModal({
     CreateStaffModal: false,
   });
+  const deleteStaff = useDeleteStaff();
+  const _handleDeleteStaff = (id: number) => {
+    deleteStaff.mutateAsync(id, {
+      onSuccess: () => {
+        toast.success("Đã xóa nhân viên thành công");
+      },
+      onError: (error) => {
+        toast.error("Đã xóa nhân viên thất bại");
+      },
+    });
+  };
   return (
     <div className="space-y-5 min-h-screen container">
       <h1 className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400 text-3xl uppercase text-center p-4 font-bold">
@@ -83,7 +100,7 @@ const Page = () => {
                         <td className="px-6 py-3">{staff.gender}</td>
                         <td className="px-6 py-3">{staff.position}</td>
                         <td className="px-6 py-3">{staff.department}</td>
-                        <td className="px-6 py-3">
+                        <td className="px-6 py-3 space-x-2">
                           <button
                             className="btn"
                             onClick={() => {
@@ -93,6 +110,22 @@ const Page = () => {
                           >
                             Sửa
                           </button>
+                          <Popover>
+                            <PopoverTrigger className="btn">Xóa</PopoverTrigger>
+                            <PopoverContent className="w-80 space-y-2">
+                              <p className="text-lg font-bold">
+                                Xác nhận xóa nhân viên {staff.fullName}?
+                              </p>
+                              <button
+                                className="btn mx-auto block w-full"
+                                onClick={() => {
+                                  _handleDeleteStaff(staff.id as number);
+                                }}
+                              >
+                                {deleteStaff.isPending ? "Đang xóa..." : "Xóa"}
+                              </button>
+                            </PopoverContent>
+                          </Popover>
                         </td>
                       </tr>
                     );

@@ -56,3 +56,14 @@ export const useUpdateDoctor = () => {
     },
   });
 };
+
+// useDeleteDoctor
+export const useDeleteDoctor = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: number) => await axios.delete(`/api/doctors/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["doctors"] });
+    },
+  });
+};

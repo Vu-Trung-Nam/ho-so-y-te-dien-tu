@@ -77,8 +77,11 @@ export async function DELETE(
 ) {
   try {
     const { slug } = await params;
-    const doctor = await prisma.doctor.delete({
+    const doctor = await prisma.doctor.update({
       where: { id: Number(slug) },
+      data: {
+        isDeleted: true,
+      },
     });
     return NextResponse.json(doctor);
   } catch (error) {

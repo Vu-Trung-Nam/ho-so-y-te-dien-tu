@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const doctorId = searchParams.get("doctorId");
     const status = searchParams.get("status");
 
-    const where: any = {};
+    const where: any = { isDeleted: false };
     if (patientId) where.patientId = Number(patientId);
     if (doctorId) where.doctorId = Number(doctorId);
     if (status) where.status = status;
